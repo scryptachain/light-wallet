@@ -1,4 +1,4 @@
-# scrypta-id
+# Scrypta Light Wallet
 
 ## Project setup
 ```
