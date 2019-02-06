@@ -8,7 +8,7 @@
       </b-modal>
       <div class="row">
         <div class="col-sm-12" style="margin-bottom:20px;">        
-          <h2>Upload a file in the blockchain</h2>
+          <h2>Upload data in the blockchain</h2>
           <input type="file" id="file" @change="loadFileData">
         </div>
         <div class="col-sm-6 col-12">
@@ -17,9 +17,12 @@
         <div class="col-sm-6 col-12">
           <input type="text" placeholder="Reference ID" class="form-control" v-model="refIDToWrite"><br>
         </div>
+        <div class="col-sm-12 col-12">
+          <textarea type="text" placeholder="Write a text" style="height:100px;" class="form-control" v-model="textToWrite"></textarea><br>
+        </div>
         <div class="col-sm-12">
           <input type="checkbox" id="encryptUpload" v-model="encryptUpload">
-          <label for="encryptUpload">Encrypt File</label>
+          <label for="encryptUpload">Encrypt Data</label>
         </div>
         <div class="col-sm-12" v-if="!isUploading">
           <button class="btn btn-primary" @click.prevent="openUnlockWallet">Upload</button>
@@ -68,10 +71,10 @@ export default {
         }
       },
       openUnlockWallet(){
-        if (this.fileToUpload !== '') {
+        if (this.fileToUpload !== '' || this.textToWrite !== '') {
           this.passwordShow = true
         }else{
-          alert('Select a file first!')
+          alert('Select a file or write a text first!')
         }
       },
       unlockWallet(){
@@ -99,7 +102,7 @@ export default {
       },
       uploadData () {
         const app = this
-        if (app.fileToUpload !== '') {
+        if (app.fileToUpload !== '' || app.textToWrite !== '') {
           app.isUploading = true
           var formData = new FormData();
           var imagefile = document.querySelector('#file');
@@ -109,6 +112,7 @@ export default {
           formData.append("private_key", app.private_key);
           formData.append("encryption", app.encryptUpload);
           formData.append("collection", app.collectionToWrite);
+          formData.append("data", app.textToWrite);
           formData.append("refID", app.refIDToWrite);
 
           app.axios.post('https://' + app.connected + '/write', formData, 
@@ -116,14 +120,19 @@ export default {
             'Content-Type': 'multipart/form-data'
           }})
           .then(function (response) {
-            alert('Upload success!')
-            app.isUploading = false
+            console.log(response)
+            if(response.data.status === 200){
+              app.isUploading = false
+              alert('Data written correctly!')
+            }else{
+              alert(app.data.data)
+            }
           })
           .catch(function () {
             alert("Seems there's a problem, please retry or change node!")
           });
         } else {
-          alert('Select a file first!')
+          alert('Select a file or write a text first!')
         }
       }
   },
@@ -150,7 +159,8 @@ export default {
       refIDToWrite: '',
       encryptUpload: true,
       private_key: '',
-      api_secret: ''
+      api_secret: '',
+      textToWrite: ''
     }
   }
 }
