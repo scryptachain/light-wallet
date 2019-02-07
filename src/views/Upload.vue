@@ -121,7 +121,7 @@ export default {
           }})
           .then(function (response) {
             console.log(response)
-            if(response.data.status === 200){
+            if(response.data.data.txs !== undefined){
               app.isUploading = false
               alert('Data written correctly!')
             }else{

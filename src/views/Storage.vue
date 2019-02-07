@@ -25,18 +25,21 @@
               </div>
               <strong>BLOCK:</strong> {{ item.block }} <br>
               <strong>TIME:</strong> {{ item.time }} <br>
-              <div v-if="item.fileinfo">
-                <div v-if="item.fileinfo.type === 'audio/mpeg'">
+              <div v-if="item.text">
+                <strong>TEXT:</strong> {{ item.text }} <br>
+              </div>
+              <div v-if="item.mimetype">
+                <div v-if="item.mimetype === 'audio'">
                   <audio controls style="width:100%">
                     <source v-bind:src="item.data" type="audio/mpeg">
                     Your browser does not support the audio element.
                   </audio> 
                 </div>
-                <div v-if="item.fileinfo.type === 'image'">
+                <div v-if="item.mimetype === 'image'">
                   <img v-bind:src="item.data" width="100%">
                 </div>
               </div>
-              <div v-if="!item.fileinfo">
+              <div v-if="!item.mimetype">
                 {{ item.data }}
               </div>
           </div>
@@ -122,9 +125,26 @@ export default {
             .then(function (response) {
               if(response.data.data !== "Provide api Secret first."){
                 app.readreturn = response.data.data
+                for(var i=0; i < app.readreturn.length; i++ ){
+                  if(app.readreturn[i].is_file === true){
+                    var hash = app.readreturn[i].ipfshash
+                    app.retrieveInfo(hash,i)
+                  }
+                }
               }
             })
         }
+      },
+      retrieveInfo (hash, i) {
+        const app = this
+        app.axios.post('https://' + app.connected + '/ipfs/retrieve', {
+          hash: hash
+        })
+        .then(function (response) {
+            app.readreturn[i].mimetype = response.data.data.type
+            app.readreturn[i].mimedetail = response.data.data.detai
+            app.$forceUpdate()
+        })
       }
   },
   props: {
