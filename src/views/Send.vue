@@ -8,27 +8,22 @@
       </b-modal>
       <div class="row">
         <div class="col-sm-12" style="margin-bottom:20px;">        
-          <h2>Upload data in the blockchain</h2>
-          <input type="file" id="file" @change="loadFileData">
+          <h2>Send LYRA</h2>
         </div>
         <div class="col-sm-6 col-12">
-          <input type="text" placeholder="Collection" class="form-control" v-model="collectionToWrite"><br>
+          <input type="text" placeholder="Address" class="form-control" v-model="addressToSend"><br>
         </div>
         <div class="col-sm-6 col-12">
-          <input type="text" placeholder="Reference ID" class="form-control" v-model="refIDToWrite"><br>
+          <input type="text" placeholder="Amount" class="form-control" v-model="amountToSend"><br>
         </div>
         <div class="col-sm-12 col-12">
-          <textarea type="text" placeholder="Write a text" style="height:100px;" class="form-control" v-model="textToWrite"></textarea><br>
+          <input type="text" placeholder="Write an unecrypted message (Max 80 characters)" class="form-control" v-model="messageToSend"><br>
         </div>
-        <div class="col-sm-12">
-          <input type="checkbox" id="encryptUpload" v-model="encryptUpload">
-          <label for="encryptUpload">Encrypt Data</label>
+        <div class="col-sm-12" v-if="!isSending">
+          <button class="btn btn-primary" @click.prevent="openUnlockWallet">SEND</button>
         </div>
-        <div class="col-sm-12" v-if="!isUploading">
-          <button class="btn btn-primary" @click.prevent="openUnlockWallet">Upload</button>
-        </div>
-        <div class="col-sm-12" v-if="isUploading">
-          Uploading, please wait..
+        <div class="col-sm-12" v-if="isSending">
+          Sending, please wait..
         </div>
       </div>
     </div>
@@ -36,9 +31,8 @@
 </template>
 
 <script>
-const fileReaderPullStream = require('pull-file-reader')
 export default {
-  name: 'home',
+  name: 'send',
   mounted : function(){
     this.checkIdaNodes()
     this.checkUser()
@@ -71,10 +65,10 @@ export default {
         }
       },
       openUnlockWallet(){
-        if (this.fileToUpload !== '' || this.textToWrite !== '') {
+        if (this.addressToSend !== '' && this.amountToSend !== '' && this.amountToSend > 0) {
           this.passwordShow = true
         }else{
-          alert('Select a file or write a text first!')
+          alert('Write the form first!')
         }
       },
       unlockWallet(){
@@ -86,7 +80,7 @@ export default {
               app.private_key = response.prv
               app.api_secret = response.api_secret
               app.passwordShow = false
-              app.uploadData()
+              app.sendLyra()
             }else{
               alert('Wrong password!')
             }
@@ -95,43 +89,35 @@ export default {
           alert('Write your password first')
         }
       },
-      loadFileData (ev) {
-        const file = ev.target.files[0]
-        this.fileToUpload = fileReaderPullStream(file)
-        this.fileName = file.name
-      },
-      uploadData () {
+      sendLyra(){
         const app = this
-        if (app.fileToUpload !== '' || app.textToWrite !== '') {
-          app.isUploading = true
-          var formData = new FormData();
-          var imagefile = document.querySelector('#file');
-          formData.append("file", imagefile.files[0]);
-          formData.append("dapp_address", app.public_address);
-          formData.append("api_secret", app.api_secret);
-          formData.append("private_key", app.private_key);
-          formData.append("encryption", app.encryptUpload);
-          formData.append("collection", app.collectionToWrite);
-          formData.append("data", app.textToWrite);
-          formData.append("refID", app.refIDToWrite);
-
-          app.axios.post('https://' + app.connected + '/write', formData, 
-          {headers: {
-            'Content-Type': 'multipart/form-data'
-          }})
-          .then(function (response) {
-            if(response.data.data.txs !== undefined){
-              app.isUploading = false
-              alert('Data written correctly!')
-            }else{
-              alert(app.data.data)
-            }
-          })
-          .catch(function () {
-            alert("Seems there's a problem, please retry or change node!")
-          });
-        } else {
-          alert('Select a file or write a text first!')
+        if(app.isSending === false){
+          if(app.messageToSend.length <= 80){
+            app.isSending = true;
+            app.axios
+              .post('https://' + app.connected + '/send', {
+                from: app.public_address,
+                to: app.addressToSend,
+                amount: app.amountToSend,
+                private_key: app.private_key,
+                message: app.messageToSend
+              })
+              .then(function (response) {
+                if(response.data.data.success === true){
+                  alert('Funds sent correctly, here the txid: ' + response.data.data.txid);
+                  app.addressToSend = '';
+                  app.amountToSend = '';
+                  app.messageToSend = '';
+                  app.private_key = '';
+                  app.unlockPwd = '';
+                  app.isSending = false;
+                }else{
+                  alert('Something goes wrong: ' + response.data.data.walletresponse.error);
+                }
+              })
+          }else{
+            alert('Message is too long!')
+          }
         }
       }
   },
@@ -152,14 +138,12 @@ export default {
       public_address: '',
       fileToUpload: '',
       fileName: '',
-      isUploading: false,
-      dataToWrite: '',
-      collectionToWrite: '',
-      refIDToWrite: '',
-      encryptUpload: true,
+      isSending: false,
+      messageToSend: '',
+      addressToSend: '',
+      amountToSend: '',
       private_key: '',
-      api_secret: '',
-      textToWrite: ''
+      api_secret: ''
     }
   }
 }

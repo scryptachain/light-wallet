@@ -14,12 +14,17 @@ export default new Router({
     {
       path: '/upload',
       name: 'upload',
-      component: () => import(/* webpackChunkName: "about" */ './views/Upload.vue')
+      component: () => import('./views/Upload.vue')
     },
     {
-      path: '/storage',
-      name: 'storage',
-      component: () => import(/* webpackChunkName: "about" */ './views/Storage.vue')
+      path: '/archive',
+      name: 'archive',
+      component: () => import('./views/Archive.vue')
+    },
+    {
+      path: '/send',
+      name: 'send',
+      component: () => import('./views/Send.vue')
     }
   ]
 })

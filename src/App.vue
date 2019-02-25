@@ -7,8 +7,9 @@
       <b-collapse is-nav id="nav_collapse">
 
         <b-navbar-nav>
-          <b-nav-item href="/#/upload">Upload data</b-nav-item>
-          <b-nav-item href="/#/storage">Stored data</b-nav-item>
+          <b-nav-item href="/#/send"><font-awesome-icon icon="wallet" /> Send</b-nav-item>
+          <b-nav-item href="/#/upload"><font-awesome-icon icon="upload" /> Upload</b-nav-item>
+          <b-nav-item href="/#/archive"><font-awesome-icon icon="archive" /> Archive</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
