@@ -18,7 +18,8 @@
           <b-nav-item-dropdown right>
             <!-- Using button-content slot -->
             <template slot="button-content">
-              <em>{{ user }}</em>
+              <em v-if="!user">No wallet</em>
+              <em v-if="user">{{ user }}</em>
             </template>
             <b-dropdown-item v-if="user" href="#" @click.prevent="logoutUser">Signout</b-dropdown-item>
           </b-nav-item-dropdown>
