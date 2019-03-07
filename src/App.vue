@@ -2,14 +2,14 @@
   <div id="app">
     <b-navbar toggleable="md" type="dark" variant="info">
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-      <b-navbar-brand href="/#/"><img src="./assets/logo.png" height="30" class="mr-2">Scrypta</b-navbar-brand>
+      <b-navbar-brand href="/#/" class="mr-5"><img src="./assets/logo.png" height="30" class="mr-2">Scrypta</b-navbar-brand>
 
       <b-collapse is-nav id="nav_collapse">
 
         <b-navbar-nav>
-          <b-nav-item href="/#/send"><font-awesome-icon icon="wallet" /> Send</b-nav-item>
-          <b-nav-item href="/#/upload"><font-awesome-icon icon="upload" /> Upload</b-nav-item>
-          <b-nav-item href="/#/archive"><font-awesome-icon icon="archive" /> Archive</b-nav-item>
+          <b-nav-item href="/#/send" class="mr-3"><font-awesome-icon icon="wallet" /> Send</b-nav-item>
+          <b-nav-item href="/#/upload" class="mr-3"><font-awesome-icon icon="upload" /> Upload</b-nav-item>
+          <b-nav-item href="/#/archive" class="mr-3"><font-awesome-icon icon="archive" /> Archive</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -18,8 +18,7 @@
           <b-nav-item-dropdown right>
             <!-- Using button-content slot -->
             <template slot="button-content">
-              <em v-if="!user">No wallet</em>
-              <em v-if="user">{{ user }}</em>
+              <em>{{ user }}</em>
             </template>
             <b-dropdown-item v-if="user" href="#" @click.prevent="logoutUser">Signout</b-dropdown-item>
           </b-nav-item-dropdown>
