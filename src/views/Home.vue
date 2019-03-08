@@ -10,6 +10,7 @@
         <div class="col-12">
           <h2>:(<br>No wallet detected<br><h6>Please start creating a new wallet or import an exsisting one.</h6></h2>
           <b-form-input v-model="createPwd" style="margin-bottom:15px" type="password" placeholder="Enter a strong wallet password and don't forget it!"></b-form-input>
+          <b-form-input v-model="createPwdRepeat" style="margin-bottom:15px" type="password" placeholder="Repeat again your password."></b-form-input>
           <div @click.prevent="createWallet" class="btn btn-primary">CREATE WALLET</div> 
           <div @click.prevent="openImportWallet" style="margin-left:15px" class="btn btn-primary">IMPORT WALLET</div>
         </div>
@@ -112,7 +113,7 @@ export default {
       },
       createWallet(){
         var app = this
-        if(this.createPwd !== ''){
+        if(app.createPwd !== '' && app.createPwd === app.createPwdRepeat){
           app.scrypta.createAddress(this.createPwd,true).then(function (response) {
             app.axios.post('https://' + app.connected + '/init', {
                 address: response.pub,
@@ -126,7 +127,7 @@ export default {
               });
           })
         }else{
-          alert('Insert a password first!')
+          alert('Password is incorrect!')
         }
       },
       checkBalance(){
@@ -228,6 +229,7 @@ export default {
       encrypted_wallet: 'NO WALLET',
       unlockPwd: '',
       createPwd: '',
+      createPwdRepeat: '',
       public_address: '',
       public_qrcode: '',
       address_balance: 'BALANCE UNKNOWN',
