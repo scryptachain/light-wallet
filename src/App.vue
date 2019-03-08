@@ -10,6 +10,7 @@
           <b-nav-item href="/#/send" class="mr-3"><font-awesome-icon icon="wallet" /> Send</b-nav-item>
           <b-nav-item href="/#/upload" class="mr-3"><font-awesome-icon icon="upload" /> Upload</b-nav-item>
           <b-nav-item href="/#/archive" class="mr-3"><font-awesome-icon icon="archive" /> Archive</b-nav-item>
+          <b-nav-item href="/#/contracts" class="mr-3"><font-awesome-icon icon="file-contract" /> Contracts</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->

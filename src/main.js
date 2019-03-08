@@ -11,6 +11,7 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import { faWallet } from '@fortawesome/free-solid-svg-icons'
 import { faUpload } from '@fortawesome/free-solid-svg-icons'
 import { faArchive } from '@fortawesome/free-solid-svg-icons'
+import { faFileContract } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 Vue.use(BootstrapVue)
@@ -19,6 +20,7 @@ library.add(faCoffee)
 library.add(faWallet)
 library.add(faUpload)
 library.add(faArchive)
+library.add(faFileContract)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
 
