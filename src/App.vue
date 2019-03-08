@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <b-navbar toggleable="md" type="dark" variant="info">
+    <b-navbar v-if="user" toggleable="md" type="dark" variant="info">
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
       <b-navbar-brand href="/#/" class="mr-5"><img src="./assets/logo.png" height="30" class="mr-2">Scrypta</b-navbar-brand>
 
