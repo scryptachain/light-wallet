@@ -51,13 +51,13 @@
             />
           </b-form-group>
           <b-form-checkbox switch v-model="encryptUpload" name="check-button" class="mb-2">Encrypt data</b-form-checkbox>
-          <b-form-group v-if="encryptUpload" id="password" label="Password" label-for="passwordInput">
+          <b-form-group v-if="encryptUpload" id="password" label="Password" label-for="passwordInput" placeholder="Choose a password to encrypt your file">
             <b-form-input
               id="passwordInput"
               type="password"
               required />
           </b-form-group>
-          <b-form-group v-if="encryptUpload" id="passwordInput" label="Repeat Password" label-for="repeatPasswordinput">
+          <b-form-group v-if="encryptUpload" id="passwordInput" label="Repeat Password" label-for="repeatPasswordinput" placeholder="Confirm password you have choose">
             <b-form-input
               id="repeatPasswordinput"
               type="password"
