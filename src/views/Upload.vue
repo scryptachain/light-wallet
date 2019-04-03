@@ -1,38 +1,75 @@
 <template>
-  <div class="home">
-    <b-badge class="node-badge" v-if="connected" variant="success">{{ connected }}</b-badge>
-    <div class="container">
+    <!-- <b-badge class="node-badge" v-if="connected" variant="success">{{ connected }}</b-badge> -->
+    <b-container fluid class="text-left">
       <b-modal v-model="passwordShow" hide-footer title="Unlock your wallet first">
         <b-form-input v-model="unlockPwd" type="password" placeholder="Enter wallet password"></b-form-input><br>
         <div @click.prevent="unlockWallet" class="btn btn-primary">UNLOCK WALLET</div>
       </b-modal>
-      <div class="row">
-        <div class="col-sm-12" style="margin-bottom:20px;">        
-          <h2>Upload data in the blockchain</h2>
-          <input type="file" id="file" @change="loadFileData">
-        </div>
-        <div class="col-sm-6 col-12">
-          <input type="text" placeholder="Collection" class="form-control" v-model="collectionToWrite"><br>
-        </div>
-        <div class="col-sm-6 col-12">
-          <input type="text" placeholder="Reference ID" class="form-control" v-model="refIDToWrite"><br>
-        </div>
-        <div class="col-sm-12 col-12">
-          <textarea type="text" placeholder="Write a text" style="height:100px;" class="form-control" v-model="textToWrite"></textarea><br>
-        </div>
-        <div class="col-sm-12">
-          <input type="checkbox" id="encryptUpload" v-model="encryptUpload">
-          <label for="encryptUpload">Encrypt Data</label>
-        </div>
-        <div class="col-sm-12" v-if="!isUploading">
-          <button class="btn btn-primary" @click.prevent="openUnlockWallet">Upload</button>
-        </div>
-        <div class="col-sm-12" v-if="isUploading">
-          Uploading, please wait..
-        </div>
-      </div>
-    </div>
-  </div>
+      <b-row>
+        <b-col>
+          <b-form-group id="title" label="Title" label-for="titleInput">
+            <b-form-input
+              id="titleInput"
+              type="text"
+              v-model="titleToWrite"
+              required
+              placeholder="Enter a title"
+            />
+          </b-form-group>
+          <b-form-group id="file" label="File" label-for="fileInput">
+            <b-form-file
+              id="fileInput"
+              placeholder="Upload data in the blockchain"
+              drop-placeholder="Drop file here..."
+              @change="loadFileData"
+              class="text-left"
+            />
+          </b-form-group>
+          <!-- <b-form-group id="collection" label="Collection" label-for="collectionInput">
+            <b-form-input
+              id="collectionInput"
+              type="text"
+              v-model="collectionToWrite"
+              required
+              placeholder="Enter collection name" />
+          </b-form-group>
+          <b-form-group id="referenceId" label="Reference ID" label-for="referenceIdInput">
+            <b-form-input
+              id="referenceIdInput"
+              type="text"
+              v-model="refIDToWrite"
+              required
+              placeholder="Enter your reference ID" />
+          </b-form-group> -->
+          <b-form-group id="message" label="Message" label-for="messageTextarea">
+            <b-form-textarea
+              id="messageTextarea"
+              v-model="textToWrite"
+              placeholder="Write a text"
+              rows="3"
+              max-rows="6"
+            />
+          </b-form-group>
+          <b-form-checkbox switch v-model="encryptUpload" name="check-button" class="mb-2">Encrypt data</b-form-checkbox>
+          <b-form-group v-if="encryptUpload" id="password" label="Password" label-for="passwordInput">
+            <b-form-input
+              id="passwordInput"
+              type="password"
+              required />
+          </b-form-group>
+          <b-form-group v-if="encryptUpload" id="passwordInput" label="Repeat Password" label-for="repeatPasswordinput">
+            <b-form-input
+              id="repeatPasswordinput"
+              type="password"
+              required />
+          </b-form-group>
+          <button v-if="!isUploading" class="btn btn-primary float-right mb-3" @click.prevent="openUnlockWallet">UPLOAD</button>
+        </b-col>
+      </b-row>
+      <b-row v-if="isUploading">
+        <b-col class="text-center"><small><b-spinner :variant="secondary" label="Loading..." class="mr-2"></b-spinner></small>Uploading, please wait..</b-col>
+      </b-row>
+    </b-container>
 </template>
 
 <script>
@@ -105,17 +142,18 @@ export default {
         if (app.fileToUpload !== '' || app.textToWrite !== '') {
           app.isUploading = true
           var formData = new FormData();
-          var imagefile = document.querySelector('#file');
+          var imagefile = document.querySelector('#fileInput');
           formData.append("file", imagefile.files[0]);
           formData.append("dapp_address", app.public_address);
           formData.append("api_secret", app.api_secret);
           formData.append("private_key", app.private_key);
+          formData.append("title", app.titleToWrite);
           formData.append("encryption", app.encryptUpload);
           formData.append("collection", app.collectionToWrite);
           formData.append("data", app.textToWrite);
           formData.append("refID", app.refIDToWrite);
 
-          app.axios.post('https://' + app.connected + '/write', formData, 
+          app.axios.post('https://' + app.connected + '/write', formData,
           {headers: {
             'Content-Type': 'multipart/form-data'
           }})
@@ -154,9 +192,10 @@ export default {
       fileName: '',
       isUploading: false,
       dataToWrite: '',
+      titleToWrite: '',
       collectionToWrite: '',
       refIDToWrite: '',
-      encryptUpload: true,
+      encryptUpload: false,
       private_key: '',
       api_secret: '',
       textToWrite: ''

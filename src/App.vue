@@ -2,15 +2,16 @@
   <div id="app">
     <b-navbar v-if="user" toggleable="md" type="dark" variant="info">
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-      <b-navbar-brand href="/#/" class="mr-5"><img src="./assets/logo.png" height="30" class="mr-2">Scrypta</b-navbar-brand>
+      <b-navbar-brand href="/#/" class="mr-5"><img src="./assets/logo.png" height="30" class="mr-2">Manent</b-navbar-brand>
 
       <b-collapse is-nav id="nav_collapse">
 
         <b-navbar-nav>
-          <b-nav-item href="/#/send" class="mr-3"><font-awesome-icon icon="wallet" /> Send</b-nav-item>
-          <b-nav-item href="/#/upload" class="mr-3"><font-awesome-icon icon="upload" /> Upload</b-nav-item>
-          <b-nav-item href="/#/archive" class="mr-3"><font-awesome-icon icon="archive" /> Archive</b-nav-item>
-          <b-nav-item href="/#/contracts" class="mr-3"><font-awesome-icon icon="file-contract" /> Contracts</b-nav-item>
+          <b-nav-item href="/#/" class="mr-3"><font-awesome-icon icon="tachometer-alt" class="mr-2" />Dashboard</b-nav-item>
+          <!-- <b-nav-item href="/#/send" class="mr-3"><font-awesome-icon icon="wallet" class="mr-2" />Send</b-nav-item> -->
+          <!-- <b-nav-item href="/#/upload" class="mr-3"><font-awesome-icon icon="upload" class="mr-2" />Upload</b-nav-item> -->
+          <b-nav-item href="/#/archive" class="mr-3"><font-awesome-icon icon="archive" class="mr-2" />Archive</b-nav-item>
+          <b-nav-item href="/#/contracts" class="mr-3"><font-awesome-icon icon="file-contract" class="mr-2" />Contracts</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -27,8 +28,8 @@
         </b-navbar-nav>
 
       </b-collapse>
-    </b-navbar><br>
-    <router-view :user="user" :rawapikey="rawapikey" v-on:onFoundUser="changeUser"/>
+    </b-navbar>
+    <router-view :user="user" :rawapikey="rawapikey" v-on:onFoundUser="changeUser" class="pt-3"/>
   </div>
 </template>
 

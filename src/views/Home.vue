@@ -1,40 +1,89 @@
 <template>
   <div class="home">
     <b-badge class="node-badge" v-if="connected" variant="success">{{ connected }}</b-badge>
-    <div class="" style="padding:0 25px;">
+
       <b-modal v-model="importShow" hide-footer title="Import a wallet">
-        Just drag and drop here or select a .sid file
-        <input type="file" @change="loadWalletFromFile">
+        <b-form-file
+          v-model="file"
+          placeholder="Just drag and drop here or select a .sid file"
+          drop-placeholder="Drop file here..."
+          @change="loadWalletFromFile"
+          class="text-left mb-3 mt-3"
+        />
       </b-modal>
-      <div class="row" v-if="!user">
-        <div class="col-12">
-          <h2>:(<br>No wallet detected<br><h6>Please start creating a new wallet or import an exsisting one.</h6></h2>
-          <b-form-input v-model="createPwd" style="margin-bottom:15px" type="password" placeholder="Enter a strong wallet password and don't forget it!"></b-form-input>
-          <b-form-input v-model="createPwdRepeat" style="margin-bottom:15px" type="password" placeholder="Repeat again your password."></b-form-input>
-          <div @click.prevent="createWallet" class="btn btn-primary">CREATE WALLET</div> 
-          <div @click.prevent="openImportWallet" style="margin-left:15px" class="btn btn-primary">IMPORT WALLET</div>
-        </div>
-      </div>
-      <div v-if="user">
-        <b-alert variant="danger" dismissible v-model="backupAlert">
-          Please stay safe and make a backup.
-          <a style="color:#000;" @click.prevent="downloadWallet" href="#">Store it in your device</a> or 
-          <a style="color:#000;" @click.prevent="openUnlockWallet" href="#">print it</a>.
-        </b-alert>
+      <b-modal id="qrModal" title="Wallet QR code">
+        <img :src="public_qrcode" width="100%">
+      </b-modal>
+      <b-modal id="sendModal" title="Send LYRA" hide-footer>
+        <Send />
+      </b-modal>
+      <b-container v-if="!user">
+        <b-row class="justify-content-center pt-5">
+          <b-col xs="10" md="4">
+            <img src="../assets/logo.png" class="mr-2">
+            <h1 class="displa-5 mt-2">manent</h1>
+          </b-col>
+        </b-row>
+          <b-row class="justify-content-center">
+            <b-col md="10">
+              <p class="mt-2 text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sollicitudin ligula quis dui malesuada, vel blandit nisl viverra. Praesent hendrerit suscipit eros, lobortis molestie dolor auctor nec. Nunc nec nisl tortor. Fusce at dictum ligula. Suspendisse in efficitur justo. Maecenas tempor metus nec laoreet pharetra.</p>
+            </b-col>
+          </b-row>
+        <b-row class="mt-3">
+          <b-col md="6">
+            <b-card bg-variant="light" class="border-0 mb-3">
+              <h2>Start creating a new wallet.</h2>
+              <b-form-input v-model="createPwd" type="password" placeholder="Enter a strong wallet password and don't forget it!" class="mb-3"></b-form-input>
+              <b-form-input v-model="createPwdRepeat" type="password" placeholder="Repeat again your password." class="mb-3"></b-form-input>
+              <b-button @click.prevent="createWallet" variant="primary">CREATE WALLET</b-button>
+            </b-card>
+          </b-col>
+          <b-col md="6">
+            <b-card bg-variant="light" class="border-0 mb-3 pb-5">
+              <h2>Or import an exsisting one.</h2>
+              <p>Please select a valid wallet .sid file</p>
+              <b-button @click.prevent="openImportWallet" variant="primary" class="mt-3">IMPORT WALLET</b-button>
+            </b-card>
+          </b-col>
+        </b-row>
+      </b-container>
+      <b-container fluid v-if="user">
+        <b-modal class="bg-danger" title="Backup your .sid file" v-model="backupAlert">
+          <h3 class="display-5">Please stay safe and make a backup.</h3>
+          <a @click.prevent="downloadWallet" href="#">Store it in your device</a> or
+          <a @click.prevent="openUnlockWallet" href="#">print it</a>.
+        </b-modal>
         <b-modal v-model="passwordShow" hide-footer title="Unlock your wallet first">
           <b-form-input v-model="unlockPwd" type="password" placeholder="Enter wallet password"></b-form-input><br>
           <div @click.prevent="unlockWallet" class="btn btn-primary">UNLOCK WALLET</div>
         </b-modal>
-        <div class="row">
-          <div class="col-sm-4 col-12 text-center">
-              <img :src="public_qrcode" width="100%">
-              <strong>Address balance</strong><br>
-              <h4 style="margin-bottom:0px">{{ address_balance }}</h4>
-              <a :href="explorer_url" target="_blank">Open block explorer</a>
-            <a id="downloadsid" style="display:none"></a>
-          </div>
-          <div class="col-sm-8 col-12 text-left">
-            <b-card title="Latest transactions" class="mb-2">
+        <b-row>
+          <b-col md="4" class="mb-3 text-left">
+            <span class="text-muted">Your balance</span>
+            <h5 class="display-5 mb-0">{{ address_balance }}</h5>
+            <b-link class="mr-5" :href="explorer_url" target="_blank"><small>Open block explorer</small></b-link>
+          </b-col>
+          <b-col md="4" class="mb-3 text-left">
+            <span class="text-muted">Your adress</span>
+            <h5 class="display-5 mb-0">{{ user }}</h5>
+            <b-link><small>Copy adress</small></b-link>
+          </b-col>
+          <b-col md="4" class="text-right">
+            <b-button size="sm" variant="primary" v-b-modal.sendModal class="text-center mr-2"><font-awesome-icon icon="wallet" class="mr-2" />Send</b-button>
+            <b-button size="sm" variant="success" v-b-modal.qrModal class="text-center"><font-awesome-icon icon="wallet" class="mr-2" />QR code</b-button>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <b-jumbotron bg-variant="white" header="" lead="" class="p-0 mt-5">
+              <highcharts :options="chartOptions"></highcharts>
+            </b-jumbotron>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col md="8"></b-col>
+          <b-col md="8">
+            <b-card title="Latest transactions" class="mb-3">
               <div v-if="!noTransactions">
                 <b-table :current-page="currentPage" :per-page="10" responsive hover :items="items" />
                 <b-pagination v-model="currentPage" :total-rows="countTransactions" :per-page="10"></b-pagination>
@@ -43,14 +92,14 @@
                 {{ transactionMessage }}
               </div>
             </b-card>
-          </div>
-        </div>
-      </div>
-    </div>
+          </b-col>
+        </b-row>
+    </b-container>
   </div>
 </template>
 
 <script>
+import Send from './Send'
 import jsPDF from 'jspdf'
 const QRious = require('qrious')
 
@@ -63,6 +112,9 @@ export default {
     setTimeout(function(){
       app.backupAlert = false;
     },10000);
+  },
+  components: {
+    Send
   },
   methods: {
       checkIdaNodes(){
@@ -242,7 +294,67 @@ export default {
       noTransactions: true,
       currentPage: 1,
       countTransactions: 0,
-      items: []
+      items: [],
+      chartOptions: {
+        series: [{
+          data: [
+            [1246406400000, 21.5],
+            [1246492800000, 22.1],
+            [1246579200000, 23],
+            [1246665600000, 23.8],
+            [1246752000000, 21.4],
+            [1246838400000, 21.3],
+            [1246924800000, 18.3],
+            [1247011200000, 15.4],
+            [1247097600000, 16.4],
+            [1247184000000, 17.7],
+            [1247270400000, 17.5],
+            [1247356800000, 17.6],
+            [1247443200000, 17.7],
+            [1247529600000, 16.8],
+            [1247616000000, 17.7],
+            [1247702400000, 16.3],
+            [1247788800000, 17.8],
+            [1247875200000, 18.1],
+            [1247961600000, 17.2],
+            [1248048000000, 14.4],
+            [1248134400000, 13.7],
+            [1248220800000, 15.7],
+            [1248307200000, 14.6],
+            [1248393600000, 15.3],
+            [1248480000000, 15.3],
+            [1248566400000, 15.8],
+            [1248652800000, 15.2],
+            [1248739200000, 14.8],
+            [1248825600000, 14.4],
+            [1248912000000, 15],
+            [1248998400000, 13.6]
+          ], // sample data
+          type: 'spline',
+          zIndex: 0,
+          marker: {
+              enabled: false
+          }
+        }],
+        yAxis: {
+          title: {
+              text: 'amount'
+          }
+        },
+        xAxis: {
+          type: 'datetime',
+          tickInterval: 24 * 3600 * 1000, // one week
+        },
+        credits: {
+          enabled: false
+        },
+        chart: {
+          backgroundColor: 'transparent'
+        },
+        title: {
+          text: undefined
+        }
+      }
     }
   }
 }

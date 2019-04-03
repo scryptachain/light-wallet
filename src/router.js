@@ -19,7 +19,7 @@ export default new Router({
     {
       path: '/archive',
       name: 'archive',
-      component: () => import('./views/Archive.vue')
+      component: () => import('./views/Archive-2.vue')
     },
     {
       path: '/send',

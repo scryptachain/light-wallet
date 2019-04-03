@@ -1,33 +1,47 @@
 <template>
-  <div class="home">
-    <b-badge class="node-badge" v-if="connected" variant="success">{{ connected }}</b-badge>
-    <div class="container">
-      <b-modal v-model="passwordShow" hide-footer title="Unlock your wallet first">
-        <b-form-input v-model="unlockPwd" type="password" placeholder="Enter wallet password"></b-form-input><br>
-        <div @click.prevent="unlockWallet" class="btn btn-primary">UNLOCK WALLET</div>
-      </b-modal>
-      <div class="row">
-        <div class="col-sm-12" style="margin-bottom:20px;">        
-          <h2>Send LYRA</h2>
-        </div>
-        <div class="col-sm-6 col-12">
-          <input type="text" placeholder="Address" class="form-control" v-model="addressToSend"><br>
-        </div>
-        <div class="col-sm-6 col-12">
-          <input type="text" placeholder="Amount" class="form-control" v-model="amountToSend"><br>
-        </div>
-        <div class="col-sm-12 col-12">
-          <input type="text" placeholder="Write an unecrypted message (Max 80 characters)" class="form-control" v-model="messageToSend"><br>
-        </div>
-        <div class="col-sm-12" v-if="!isSending">
-          <button class="btn btn-primary" @click.prevent="openUnlockWallet">SEND</button>
-        </div>
-        <div class="col-sm-12" v-if="isSending">
-          Sending, please wait..
-        </div>
-      </div>
-    </div>
-  </div>
+  <!-- <b-badge class="node-badge" v-if="connected" variant="success">{{ connected }}</b-badge> -->
+  <b-container fluid class="text-left">
+    <!-- <b-modal v-model="passwordShow" hide-footer title="Unlock your wallet first">
+      <b-form-input v-model="unlockPwd" type="password" placeholder="Enter wallet password"></b-form-input><br>
+      <div @click.prevent="unlockWallet" class="btn btn-primary">UNLOCK WALLET</div>
+    </b-modal> -->
+    <b-row>
+      <!-- <div class="col-sm-12" style="margin-bottom:20px;">
+        <h2>Send LYRA</h2>
+      </div> -->
+      <b-col>
+        <b-form-group id="adress" label="Adress" label-for="adressInput">
+          <b-form-input
+            id="adressInput"
+            type="text"
+            v-model="addressToSend"
+            required
+            placeholder="Enter your adress" />
+        </b-form-group>
+        <b-form-group id="amount" label="Amount" label-for="amountInput">
+          <b-form-input
+            id="amountToSend"
+            type="number"
+            v-model="amountToSend"
+            required
+            placeholder="Amount you mean to send" />
+        </b-form-group>
+        <b-form-group id="message" label="Message" label-for="messageTextarea">
+          <b-form-textarea
+            id="messageTextarea"
+            v-model="messageToSend"
+            placeholder="Write an unecrypted message (Max 80 characters)"
+            rows="3"
+            max-rows="6"
+          />
+        </b-form-group>
+        <button v-if="!isSending" class="btn btn-primary float-right mt-3 mb-3" @click.prevent="openUnlockWallet">SEND</button>
+      </b-col>
+    </b-row>
+    <b-row v-if="isSending">
+      <b-col class="text-center">Sending, please wait..</b-col>
+    </b-row>
+  </b-container>
 </template>
 
 <script>

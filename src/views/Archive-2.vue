@@ -11,16 +11,18 @@
     <b-container fluid>
       <b-row>
         <b-col v-if="readreturn">
-          <!-- <div style="float:left">
-            <b-form-checkbox switch v-model="decryptRead" name="check-button">Decrypt data</b-form-checkbox>
-          </div> -->
+          <div style="float:left">
+            <!-- <b-form-checkbox switch v-model="decryptRead" name="check-button">Decrypt data</b-form-checkbox> -->
+              <b-button v-if="viewGrid" size="sm" variant="light" :pressed.sync="viewGrid" class="text-center"><font-awesome-icon icon="th" /></b-button>
+              <b-button v-if="!viewGrid" size="sm" variant="light" :pressed.sync="viewGrid" class="text-center"><font-awesome-icon icon="list" /></b-button>
+          </div>
           <div style="float:right">
             <b-button size="sm" variant="primary" v-b-modal.uploadModal class="text-center mr-2"><font-awesome-icon icon="upload" class="mr-2" />Upload</b-button>
-            <button class="btn btn-primary" style="padding:3px 10px;" @click.prevent="readData"><font-awesome-icon icon="sync" class="mr-2" />Refresh</button>
+            <b-button size="sm" variant="primary" @click.prevent="readData" class="text-center"><font-awesome-icon icon="sync" class="mr-2" />Refresh</b-button>
           </div>
         </b-col>
       </b-row>
-      <b-row class="mt-3">
+      <b-row class="mt-3" v-if="!viewGrid">
         <b-col lg="4" v-for="item in readreturn" :key="item.uuid" class="text-left mb-3" style="-webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto;">
           <b-card>
             <b-card-body>
@@ -28,8 +30,8 @@
                 <small class="text-muted mr-3"><font-awesome-icon icon="clock" class="mr-1" />{{ item.time | moment("h:mm a") }}</small>
                 <small class="text-muted"><font-awesome-icon icon="calendar" class="mr-1" />{{ item.time | moment("dddd, MMMM Do YYYY") }}</small>
               </div>
-              <div v-if="item.collection !== ''" class="mb-1"><small class="text-muted">Collection:</small><br/>{{ item.collection }}</div>
-              <div v-if="item.refID !== ''" class="mb-1"><small class="text-muted">Reference:</small><br />{{ item.refID }}</div>
+              <!-- <div v-if="item.collection !== ''" class="mb-1"><small class="text-muted">Collection:</small><br/>{{ item.collection }}</div>
+              <div v-if="item.refID !== ''" class="mb-1"><small class="text-muted">Reference:</small><br />{{ item.refID }}</div> -->
               <div class="mb-1"><small class="text-muted">Unique identifier:</small><br/>{{ item.uuid }}</div>
               <div class="mb-1"><small class="text-muted">Block</small><br />{{ item.block }}</div>
               <div v-if="item.text" class="mb-1"><small class="text-muted">Text</small><br />{{ item.text }}</div>
@@ -52,8 +54,29 @@
 
         </b-col>
       </b-row>
+      <b-row v-if="viewGrid">
+        <b-col cols="12" class="pt-3">
+          <b-table
+            class="align-left"
+            striped
+            hover
+            :items="tableItems"
+            :fields="tableFields"
+            :sort-by.sync="sortBy"
+            :sort-desc.sync="sortDesc"
+          >
+            <template slot="actions" slot-scope="row">
+              <b-button size="sm" @click="" class="mr-1">Show</b-button>
+            </template>
+            <template slot="dataModal" slot-scope="row">
+              <b-modal v-model="passwordShow" hide-footer title="Record content">{ row.data }</b-modal>
+            </template>
+          </b-table>
+        </b-col>
+      </b-row>
     </b-container>
-    <b-card-group columns>
+
+    <!-- <b-card-group columns>
       <b-card
          v-for="item in readreturn"
          :key="item.uuid"
@@ -84,7 +107,7 @@
           </div>
         </b-card-text>
       </b-card>
-    </b-card-group>
+    </b-card-group> -->
   </div>
 </template>
 
@@ -175,6 +198,7 @@ export default {
                     app.retrieveInfo(hash,i)
                   }
                 }
+                app.returnTableItems()
               }
             })
         }
@@ -189,6 +213,22 @@ export default {
             app.readreturn[i].mimedetail = response.data.data.detai
             app.$forceUpdate()
         })
+      },
+      returnTableItems() {
+        const app = this
+        //console.log('Ciao sono il metodo returnTableItems ');
+        console.log(app.readreturn);
+        for(var i=0; i < app.readreturn.length; i++ ){
+          // app.tableItems[i].address = app.readreturn[i].address
+          app.tableItems.push({
+              uuid: app.readreturn[i].uuid,
+              block: app.readreturn[i].block,
+              date: app.$moment.unix(app.readreturn[i].time).format("hh:mm a, MM/DD/YYYY"),
+              data: app.readreturn[i].data,
+          })
+          //console.log('block ' + i, app.readreturn[i].block);
+        }
+        //console.log('tableItems', app.tableItems);
       }
   },
   props: {
@@ -208,7 +248,18 @@ export default {
       public_address: '',
       decryptRead: false,
       api_secret: '',
-      readreturn: []
+      readreturn: [],
+      tableItems: [],
+      tableFields: [
+        { key: 'uuid', label: 'Unique Identifier', class: 'text-left' },
+        { key: 'block', label: 'Block', class: 'text-left' },
+        { key: 'date', label: 'Date', sortDirection: 'desc', class: 'text-left' },
+        { key: 'actions', label: 'Actions', class: 'text-right' }
+      ],
+      sortBy: 'date',
+      sortDesc: true,
+      viewGrid: false,
+      chooseViewIcon: "upload",
     }
   }
 }
