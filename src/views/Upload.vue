@@ -51,7 +51,7 @@
             />
           </b-form-group>
           <b-form-checkbox switch v-model="encryptUpload" name="check-button" class="mb-2">Encrypt data</b-form-checkbox>
-          <b-form-group v-if="encryptUpload" id="password" label="Password" label-for="passwordInput" placeholder="Choose a password to encrypt your file">
+          <!--<b-form-group v-if="encryptUpload" id="password" label="Password" label-for="passwordInput" placeholder="Choose a password to encrypt your file">
             <b-form-input
               id="passwordInput"
               type="password"
@@ -62,7 +62,7 @@
               id="repeatPasswordinput"
               type="password"
               required />
-          </b-form-group>
+          </b-form-group>-->
           <button v-if="!isUploading" class="btn btn-primary float-right mb-3" @click.prevent="openUnlockWallet">UPLOAD</button>
         </b-col>
       </b-row>
@@ -147,11 +147,10 @@ export default {
           formData.append("dapp_address", app.public_address);
           formData.append("api_secret", app.api_secret);
           formData.append("private_key", app.private_key);
-          formData.append("title", app.titleToWrite);
           formData.append("encryption", app.encryptUpload);
           formData.append("collection", app.collectionToWrite);
           formData.append("data", app.textToWrite);
-          formData.append("refID", app.refIDToWrite);
+          formData.append("refID", app.titleToWrite);
 
           app.axios.post('https://' + app.connected + '/write', formData,
           {headers: {
@@ -160,6 +159,8 @@ export default {
           .then(function (response) {
             if(response.data.data.txs !== undefined){
               app.isUploading = false
+              app.dataToWrite = ''
+              app.titleToWrite = ''
               alert('Data written correctly!')
             }else{
               alert(app.data.data)

@@ -8,10 +8,7 @@
 
         <b-navbar-nav>
           <b-nav-item href="/#/" class="mr-3"><font-awesome-icon icon="tachometer-alt" class="mr-2" />Dashboard</b-nav-item>
-          <!-- <b-nav-item href="/#/send" class="mr-3"><font-awesome-icon icon="wallet" class="mr-2" />Send</b-nav-item> -->
-          <!-- <b-nav-item href="/#/upload" class="mr-3"><font-awesome-icon icon="upload" class="mr-2" />Upload</b-nav-item> -->
           <b-nav-item href="/#/archive" class="mr-3"><font-awesome-icon icon="archive" class="mr-2" />Archive</b-nav-item>
-          <b-nav-item href="/#/contracts" class="mr-3"><font-awesome-icon icon="file-contract" class="mr-2" />Contracts</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
