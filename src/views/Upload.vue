@@ -51,18 +51,20 @@
             />
           </b-form-group>
           <b-form-checkbox switch v-model="encryptUpload" name="check-button" class="mb-2">Encrypt data</b-form-checkbox>
-          <!--<b-form-group v-if="encryptUpload" id="password" label="Password" label-for="passwordInput" placeholder="Choose a password to encrypt your file">
+          <b-form-group v-if="encryptUpload" id="password" label="Password" label-for="passwordInput">
             <b-form-input
               id="passwordInput"
               type="password"
+              placeholder="Choose a password to encrypt your file"
               required />
           </b-form-group>
-          <b-form-group v-if="encryptUpload" id="passwordInput" label="Repeat Password" label-for="repeatPasswordinput" placeholder="Confirm password you have choose">
+          <b-form-group v-if="encryptUpload" id="passwordInput" label="Repeat Password" label-for="repeatPasswordinput" >
             <b-form-input
               id="repeatPasswordinput"
               type="password"
+              placeholder="Confirm password you have choose"
               required />
-          </b-form-group>-->
+          </b-form-group>
           <button v-if="!isUploading" class="btn btn-primary float-right mb-3" @click.prevent="openUnlockWallet">UPLOAD</button>
         </b-col>
       </b-row>

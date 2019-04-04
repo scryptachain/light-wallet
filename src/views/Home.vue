@@ -81,12 +81,14 @@
         <b-col md="4" class="mb-3 text-left">
           <span class="text-muted">Your address</span>
           <h5 class="display-5 mb-0">{{ user }}</h5>
-          <b-link>
-            <small v-clipboard:copy="public_address">Copy address</small>
+          <b-link @click.stop.prevent="copyAdress">
+            <small><font-awesome-icon icon="clipboard" class="mr-2" />Copy adress to clipboard</small>
+            <input type="hidden" id="user-adress" :value="user">
           </b-link>
         </b-col>
         <b-col md="4" class="text-right">
           <b-button size="sm" variant="primary" v-on:click="showBackup" class="text-center mr-2">
+            <font-awesome-icon icon="shield-alt" class="mr-1"/>
             Backup Wallet
           </b-button>
           <b-button size="sm" variant="primary" v-b-modal.sendModal class="text-center mr-2">
@@ -108,7 +110,7 @@
         <b-col md="12">
           <b-card title="Latest transactions" class="mb-3">
             <div v-if="!noTransactions">
-              <b-table :current-page="currentPage" :per-page="10" responsive hover :items="items"/>
+              <b-table :current-page="currentPage" :per-page="10" responsive hover :items="items" sort-by="date"/>
               <b-pagination v-model="currentPage" :total-rows="countTransactions" :per-page="10"></b-pagination>
             </div>
             <div v-if="noTransactions">{{ transactionMessage }}</div>
@@ -127,6 +129,7 @@ const QRious = require("qrious");
 export default {
   name: "home",
   mounted: function() {
+    this.$msg({text:'Address was copied ', background: 'green'});
     const app = this;
     this.fetchGraph();
     this.checkIdaNodes();
@@ -324,6 +327,26 @@ export default {
       } else {
         alert("Decrypt your wallet first");
       }
+    },
+    copyAdress () {
+      let adressToCopy = document.querySelector('#user-adress')
+      adressToCopy.setAttribute('type', 'text')    // 不是 hidden 才能複製
+      adressToCopy.select()
+
+      const app = this
+
+      try {
+        var successful = document.execCommand('copy');
+        var msg = successful ? 'successful' : 'unsuccessful';
+        //alert('Adress was copied ' + msg);
+        // app.$msg({text:'Address was copied ' + msg, background: 'green'})
+      } catch (err) {
+        alert('Oops, unable to copy');
+      }
+
+      /* unselect the range */
+      adressToCopy.setAttribute('type', 'hidden')
+      window.getSelection().removeAllRanges()
     }
   },
   props: {
@@ -373,7 +396,7 @@ export default {
         },
         xAxis: {
           type: "datetime",
-          tickInterval: 24 * 3600 * 1000 
+          tickInterval: 24 * 3600 * 1000
         },
         credits: {
           enabled: false

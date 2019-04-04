@@ -14,14 +14,17 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
 
-          <b-nav-item-dropdown right>
+          <!-- <b-nav-item-dropdown right> -->
             <!-- Using button-content slot -->
-            <template slot="button-content">
+            <!-- <template slot="button-content">
               <em v-if="!user">No wallet</em>
               <em v-if="user">{{ user }}</em>
             </template>
             <b-dropdown-item v-if="user" href="#" @click.prevent="logoutUser">Signout</b-dropdown-item>
-          </b-nav-item-dropdown>
+          </b-nav-item-dropdown> -->
+
+          <b-nav-item v-if="user" href="#" @click.prevent="logoutUser"><font-awesome-icon icon="sign-out-alt" class="mr-2" />Signout</b-nav-item>
+
         </b-navbar-nav>
 
       </b-collapse>
@@ -50,6 +53,7 @@
         this.user = null
         this.rawapikey = null
         this.scrypta.forgetKey()
+        this.$router.push('/')
       }
     }
   }

@@ -16,7 +16,7 @@
             type="text"
             v-model="addressToSend"
             required
-            placeholder="Enter your adress" />
+            placeholder="Enter a valid LYRA address" />
         </b-form-group>
         <b-form-group id="amount" label="Amount" label-for="amountInput">
           <b-form-input
