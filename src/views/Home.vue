@@ -79,10 +79,10 @@
           </b-link>
         </b-col>
         <b-col md="4" class="mb-3 text-left">
-          <span class="text-muted">Your adress</span>
+          <span class="text-muted">Your address</span>
           <h5 class="display-5 mb-0">{{ user }}</h5>
           <b-link>
-            <small>Copy adress</small>
+            <small v-clipboard:copy="public_address">Copy address</small>
           </b-link>
         </b-col>
         <b-col md="4" class="text-right">

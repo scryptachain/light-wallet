@@ -20,10 +20,12 @@ import { faList } from '@fortawesome/free-solid-svg-icons'
 import { faTh } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import HighchartsVue from 'highcharts-vue'
+import VueClipboard from 'vue-clipboard2'
 
 Vue.use(BootstrapVue)
 Vue.use(HighchartsVue)
 Vue.use(require('vue-moment'))
+Vue.use(VueClipboard)
 window.axios = require('axios')
 library.add(faCoffee)
 library.add(faWallet)
