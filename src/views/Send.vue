@@ -1,10 +1,10 @@
 <template>
   <!-- <b-badge class="node-badge" v-if="connected" variant="success">{{ connected }}</b-badge> -->
   <b-container fluid class="text-left">
-    <!-- <b-modal v-model="passwordShow" hide-footer title="Unlock your wallet first">
+    <b-modal v-model="passwordShow" hide-footer title="Unlock your wallet first">
       <b-form-input v-model="unlockPwd" type="password" placeholder="Enter wallet password"></b-form-input><br>
       <div @click.prevent="unlockWallet" class="btn btn-primary">UNLOCK WALLET</div>
-    </b-modal> -->
+    </b-modal>
     <b-row>
       <!-- <div class="col-sm-12" style="margin-bottom:20px;">
         <h2>Send LYRA</h2>

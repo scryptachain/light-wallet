@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <b-navbar v-if="user" toggleable="md" type="dark" variant="info">
+    <b-navbar style="background:#0000F0!important" v-if="user" toggleable="md" type="dark" variant="info">
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-      <b-navbar-brand href="/#/" class="mr-5"><img src="./assets/logo.png" height="30" class="mr-2">Manent</b-navbar-brand>
+      <b-navbar-brand href="/#/" class="mr-5"><img src="./assets/logo.png" height="30" class="mr-2 logo">Manent</b-navbar-brand>
 
       <b-collapse is-nav id="nav_collapse">
 
@@ -14,25 +14,18 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
 
-          <!-- <b-nav-item-dropdown right> -->
-            <!-- Using button-content slot -->
-            <!-- <template slot="button-content">
-              <em v-if="!user">No wallet</em>
-              <em v-if="user">{{ user }}</em>
-            </template>
-            <b-dropdown-item v-if="user" href="#" @click.prevent="logoutUser">Signout</b-dropdown-item>
-          </b-nav-item-dropdown> -->
-
-          <b-nav-item v-if="user" href="#" @click.prevent="logoutUser"><font-awesome-icon icon="sign-out-alt" class="mr-2" />Signout</b-nav-item>
+          <b-nav-item v-if="user" href="#" @click.prevent="logoutUser"><font-awesome-icon icon="sign-out-alt" class="mr-2" />Logout</b-nav-item>
 
         </b-navbar-nav>
 
       </b-collapse>
     </b-navbar>
     <router-view :user="user" :rawapikey="rawapikey" v-on:onFoundUser="changeUser" class="pt-3"/>
+    <div class="text-center footer">
+      Open Source Project developed by <a href="https://scryptachain.org" target="_blank">Scrypta Task Force</a>.
+    </div>
   </div>
 </template>
-
 <script>
 
   export default {
@@ -59,10 +52,33 @@
   }
 </script>
 
-
 <style>
+  .logo{
+    float: left;
+    margin-top: -2px;
+    margin-right: 10px;
+    height: 28px;
+  }
+ .footer{
+    position:fixed;
+    bottom:0;
+    left:0;
+    font-size:12px; 
+    text-align:center;
+    width:100%;
+    padding:5px;
+    border-top:1px solid #eee;
+    background:#fff;
+    z-index:99;
+  }
+
+  .vue-Message .vue-Message-Detail{
+    font-family: 'karmillaregular'!important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
   #app {
-    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    font-family: 'karmillaregular'!important;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;

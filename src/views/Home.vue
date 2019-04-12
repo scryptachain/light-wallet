@@ -21,14 +21,18 @@
       <b-row class="justify-content-center pt-5">
         <b-col xs="10" md="4">
           <img src="../assets/logo.png" class="mr-2">
-          <h1 class="displa-5 mt-2">manent</h1>
+          <h1 class="displa-5 mt-2">Manent</h1>
         </b-col>
       </b-row>
       <b-row class="justify-content-center">
         <b-col md="10">
           <p
             class="mt-2 text-muted"
-          >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent sollicitudin ligula quis dui malesuada, vel blandit nisl viverra. Praesent hendrerit suscipit eros, lobortis molestie dolor auctor nec. Nunc nec nisl tortor. Fusce at dictum ligula. Suspendisse in efficitur justo. Maecenas tempor metus nec laoreet pharetra.</p>
+          >Scrypta Manent: this is a beta version Web dApp running on Scrypta Blockchain. An application that you can use as a Wallet in  Cloud, which will allow you to send and recive LYRA. 
+          <br>You can also use it to upload files directly into the blockchain and encrypt them, thanks to IPFS technology and IdANodes. <br><br>
+          You have to make a backup. Please remind, you are ONLY responsible for this .sid file and password associated. No one will have to copy or to rescue it, so keep it safe.
+          <br><br>
+          This application is still in the testing phase, use it for research and development purposes.</p>
         </b-col>
       </b-row>
       <b-row class="mt-3">
@@ -81,9 +85,9 @@
         <b-col md="4" class="mb-3 text-left">
           <span class="text-muted">Your address</span>
           <h5 class="display-5 mb-0">{{ user }}</h5>
-          <b-link @click.stop.prevent="copyAdress">
-            <small><font-awesome-icon icon="clipboard" class="mr-2" />Copy adress to clipboard</small>
-            <input type="hidden" id="user-adress" :value="user">
+          <b-link @click.stop.prevent="copyAddress">
+            <small><font-awesome-icon icon="clipboard" class="mr-2" />Copy address to clipboard</small>
+            <input type="hidden" id="user-address" :value="user">
           </b-link>
         </b-col>
         <b-col md="4" class="text-right">
@@ -129,7 +133,6 @@ const QRious = require("qrious");
 export default {
   name: "home",
   mounted: function() {
-    this.$msg({text:'Address was copied ', background: 'green'});
     const app = this;
     this.fetchGraph();
     this.checkIdaNodes();
@@ -328,24 +331,20 @@ export default {
         alert("Decrypt your wallet first");
       }
     },
-    copyAdress () {
-      let adressToCopy = document.querySelector('#user-adress')
-      adressToCopy.setAttribute('type', 'text')    // 不是 hidden 才能複製
-      adressToCopy.select()
-
+    copyAddress () {
+      let addressToCopy = document.querySelector('#user-address')
+      addressToCopy.setAttribute('type', 'text')
+      addressToCopy.select()
       const app = this
-
       try {
-        var successful = document.execCommand('copy');
-        var msg = successful ? 'successful' : 'unsuccessful';
-        //alert('Adress was copied ' + msg);
-        // app.$msg({text:'Address was copied ' + msg, background: 'green'})
+        document.execCommand('copy');
+        app.$msg({text:'Address was copied', background: 'green'})
       } catch (err) {
         alert('Oops, unable to copy');
       }
 
       /* unselect the range */
-      adressToCopy.setAttribute('type', 'hidden')
+      addressToCopy.setAttribute('type', 'hidden')
       window.getSelection().removeAllRanges()
     }
   },
