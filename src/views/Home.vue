@@ -66,7 +66,7 @@
     <b-container fluid v-if="user">
       <b-modal class="bg-danger" title="Backup your .sid file" v-model="backupAlert">
         <h3 class="display-5">Please stay safe and make a backup.</h3>
-        <a @click.prevent="downloadWallet" href="#">Store it in your device</a> or
+        <a v-on:click="downloadWallet" href="#">Store it in your device</a> or
         <a @click.prevent="openUnlockWallet" href="#">print it</a>.
       </b-modal>
       <b-modal v-model="passwordShow" hide-footer title="Unlock your wallet first">
