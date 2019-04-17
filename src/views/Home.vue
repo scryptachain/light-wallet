@@ -19,16 +19,16 @@
     </b-modal>
     <b-container v-if="!user">
       <b-row class="justify-content-center pt-5">
-        <b-col xs="10" md="4">
-          <img src="../assets/logo.png" class="mr-2">
+        <b-col xs="10" md="4" class="text-center">
+          <img src="../assets/logo.png">
           <h1 class="displa-5 mt-2">Manent</h1>
         </b-col>
       </b-row>
       <b-row class="justify-content-center">
-        <b-col md="10">
+        <b-col md="9" class="pt-5 pb-5">
           <p
-            class="mt-2 text-muted"
-          >Scrypta Manent: this is a beta version Web dApp running on Scrypta Blockchain. An application that you can use as a Wallet in  Cloud, which will allow you to send and recive LYRA. 
+            class="mt-2 text-muted text-justify"
+          >Scrypta Manent: this is a beta version Web dApp running on Scrypta Blockchain. An application that you can use as a Wallet in Cloud, which will allow you to send and recive LYRA.
           <br>You can also use it to upload files directly into the blockchain and encrypt them, thanks to IPFS technology and IdANodes. <br><br>
           You have to make a backup. Please remind, you are ONLY responsible for this .sid file and password associated. No one will have to copy or to rescue it, so keep it safe.
           <br><br>
@@ -37,7 +37,7 @@
       </b-row>
       <b-row class="mt-3">
         <b-col md="6">
-          <b-card bg-variant="light" class="border-0 mb-3">
+          <b-card bg-variant="light" class="border-0 mb-3 text-center">
             <h2>Start creating a new wallet.</h2>
             <b-form-input
               v-model="createPwd"
@@ -55,7 +55,7 @@
           </b-card>
         </b-col>
         <b-col md="6">
-          <b-card bg-variant="light" class="border-0 mb-3 pb-5">
+          <b-card bg-variant="light" class="border-0 mb-3 pb-5 text-center">
             <h2>Or import an exsisting one.</h2>
             <p>Please select a valid wallet .sid file</p>
             <b-button @click.prevent="openImportWallet" variant="primary" class="mt-3">IMPORT WALLET</b-button>

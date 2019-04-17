@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <b-navbar style="background:#0000F0!important" v-if="user" toggleable="md" type="dark" variant="info">
+    <b-navbar v-if="user" toggleable="md" variant="light">
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-      <b-navbar-brand href="/#/" class="mr-5"><img src="./assets/logo.png" height="30" class="mr-2 logo">Manent</b-navbar-brand>
+      <b-navbar-brand href="/#/" class="mr-5 text-dark"><img src="./assets/logo.png" height="30" class="mr-2 logo">Manent</b-navbar-brand>
 
       <b-collapse is-nav id="nav_collapse">
 
-        <b-navbar-nav>
+        <b-navbar-nav variant="primary">
           <b-nav-item href="/#/" class="mr-3"><font-awesome-icon icon="tachometer-alt" class="mr-2" />Dashboard</b-nav-item>
           <b-nav-item href="/#/archive" class="mr-3"><font-awesome-icon icon="archive" class="mr-2" />Archive</b-nav-item>
         </b-navbar-nav>
@@ -51,49 +51,3 @@
     }
   }
 </script>
-
-<style>
-  .logo{
-    float: left;
-    margin-top: -2px;
-    margin-right: 10px;
-    height: 28px;
-  }
- .footer{
-    position:fixed;
-    bottom:0;
-    left:0;
-    font-size:12px; 
-    text-align:center;
-    width:100%;
-    padding:5px;
-    border-top:1px solid #eee;
-    background:#fff;
-    z-index:99;
-  }
-
-  .vue-Message .vue-Message-Detail{
-    font-family: 'karmillaregular'!important;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  #app {
-    font-family: 'karmillaregular'!important;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
-  }
-  #nav {
-    padding: 30px;
-  }
-
-  #nav a {
-    font-weight: bold;
-    color: #2c3e50;
-  }
-
-  #nav a.router-link-exact-active {
-    color: #42b983;
-  }
-</style>

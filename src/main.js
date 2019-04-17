@@ -24,6 +24,7 @@ import { faClipboard } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import HighchartsVue from 'highcharts-vue'
 import Msg from 'vue-message'
+import '@/assets/custom.scss'
 
 Vue.use(BootstrapVue)
 Vue.use(HighchartsVue)
