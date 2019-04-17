@@ -50,7 +50,7 @@
               max-rows="6"
             />
           </b-form-group>
-          <b-form-checkbox switch v-model="encryptUpload" name="check-button" class="mb-2">Encrypt data</b-form-checkbox>
+          <!-- <b-form-checkbox switch v-model="encryptUpload" name="check-button" class="mb-2">Encrypt data</b-form-checkbox> -->
           <b-form-group v-if="encryptUpload" id="password" label="Password" label-for="passwordInput">
             <b-form-input
               id="passwordInput"
