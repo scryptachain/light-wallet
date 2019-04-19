@@ -90,7 +90,7 @@
             <input type="hidden" id="user-address" :value="user">
           </b-link>
         </b-col>
-        <b-col md="4" class="text-right">
+        <b-col md="4" class="text-right mt-3">
           <b-button size="sm" variant="primary" v-on:click="showBackup" class="text-center mr-2">
             <font-awesome-icon icon="shield-alt" class="mr-1"/>
             Backup Wallet
@@ -98,23 +98,23 @@
           <b-button size="sm" variant="primary" v-b-modal.sendModal class="text-center mr-2">
             <font-awesome-icon icon="wallet" class="mr-2"/>Send
           </b-button>
-          <b-button size="sm" variant="success" v-b-modal.qrModal class="text-center">
+          <b-button size="sm" variant="secondary" v-b-modal.qrModal class="text-center">
             <font-awesome-icon icon="wallet" class="mr-2"/>QR code
           </b-button>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
-          <b-jumbotron bg-variant="white" header lead class="p-0 mt-5">
+          <b-jumbotron bg-variant="white" header lead class="pt-5 pb-0 pr-5 m-1 shadow-sm">
             <highcharts :options="chartOptions" ref="highcharts"></highcharts>
           </b-jumbotron>
         </b-col>
       </b-row>
       <b-row>
         <b-col md="12">
-          <b-card title="Latest transactions" class="mb-3">
+          <b-card title="Latest transactions" border-variant="light" class="mb-3 mt-3 shadow-sm">
             <div v-if="!noTransactions">
-              <b-table :current-page="currentPage" :per-page="10" responsive hover :items="items" sort-by="date"/>
+              <b-table :current-page="currentPage" :per-page="10" responsive hover :items="items" sort-by="date" />
               <b-pagination v-model="currentPage" :total-rows="countTransactions" :per-page="10"></b-pagination>
             </div>
             <div v-if="noTransactions">{{ transactionMessage }}</div>
@@ -385,7 +385,8 @@ export default {
             marker: {
               enabled: false
             },
-            name: "Price USD"
+            name: "Price USD",
+            color: '#D43F51'
           }
         ],
         yAxis: {

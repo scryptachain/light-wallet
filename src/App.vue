@@ -1,8 +1,8 @@
 <template>
-  <div id="app">
-    <b-navbar v-if="user" toggleable="md" variant="light">
+  <div id="app" class="pb-5">
+    <b-navbar v-if="user" toggleable="md" class="border-bottom">
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
-      <b-navbar-brand href="/#/" class="mr-5 text-dark"><img src="./assets/logo.png" height="30" class="mr-2 logo">Manent</b-navbar-brand>
+      <b-navbar-brand href="/#/" class="mr-5 text-primary"><img src="./assets/logo.png" height="30" class="mr-2 logo">Manent</b-navbar-brand>
 
       <b-collapse is-nav id="nav_collapse">
 
@@ -21,7 +21,7 @@
       </b-collapse>
     </b-navbar>
     <router-view :user="user" :rawapikey="rawapikey" v-on:onFoundUser="changeUser" class="pt-3"/>
-    <div class="text-center footer">
+    <div class="text-center footer bg-light">
       Open Source Project developed by <a href="https://scryptachain.org" target="_blank">Scrypta Task Force</a>.
     </div>
   </div>

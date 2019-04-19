@@ -1,5 +1,5 @@
 <template>
-  <div class="home bg-light">
+  <div class="home">
     <b-badge class="node-badge" v-if="connected" variant="success">{{ connected }}</b-badge>
     <b-modal v-model="passwordShow" hide-footer title="Unlock your wallet first">
       <b-form-input v-model="unlockPwd" type="password" placeholder="Enter wallet password"></b-form-input><br>
@@ -24,7 +24,7 @@
       </b-row>
       <b-row class="mt-3" v-if="!viewGrid">
         <b-col lg="4" v-for="item in readreturn" :key="item.uuid" class="text-left mb-3" style="-webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto;">
-          <b-card>
+          <b-card border-variant="light" class="mb-3 mt-3 shadow-sm">
             <b-card-body>
               <div class="mb-1">
                 <small class="text-muted mr-3"><font-awesome-icon icon="clock" class="mr-1" />{{ item.time | moment("h:mm a") }}</small>

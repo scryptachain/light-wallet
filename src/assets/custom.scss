@@ -8,12 +8,13 @@ $primary: #D43F51;
 
 html, body {
   font-family: 'Poppins', sans-serif;
+  background: $light;
 }
 
 /* Bootstrap overrides */
 
 .btn {
-  border-radius: 20px;
+  border-radius: 15px;
 }
 
 .footer{
