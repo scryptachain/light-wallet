@@ -46,7 +46,7 @@
                   <img v-bind:src="item.data" width="100%">
                 </div>
               </div>
-              <div v-if="!item.mimetype" class="mb-1">
+              <div v-if="!item.mimetype || item.mimetype === 'text'" class="mb-1">
                 {{ item.data }}
               </div>
             </b-card-body>
