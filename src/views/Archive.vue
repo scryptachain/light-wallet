@@ -57,8 +57,8 @@
       <b-row v-if="viewGrid">
         <b-col cols="12" class="pt-3">
           <b-table
-            class="align-left"
-            striped
+            border-variant="light"
+            class="align-left mb-3 mt-3 shadow-sm bg-white"
             hover
             :items="tableItems"
             :fields="tableFields"

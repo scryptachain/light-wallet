@@ -338,9 +338,9 @@ export default {
       const app = this
       try {
         document.execCommand('copy');
-        app.$msg({text:'Address was copied', background: 'green'})
+        app.$msg({text:'Address was copied', position: 'top', duration: 1000})
       } catch (err) {
-        alert('Oops, unable to copy');
+        app.$msg({text:'Oops, unable to copy', position: 'top', duration: 1000});
       }
 
       /* unselect the range */
