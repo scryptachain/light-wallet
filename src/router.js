@@ -25,6 +25,11 @@ export default new Router({
       path: '/send',
       name: 'send',
       component: () => import('./views/Send.vue')
+    },
+    {
+      path: '/data-explorer',
+      name: 'data-explorer',
+      component: () => import('./views/DataExplorer.vue')
     }
   ]
 })

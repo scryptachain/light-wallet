@@ -9,6 +9,7 @@
         <b-navbar-nav variant="primary">
           <b-nav-item href="/#/" class="mr-3"><font-awesome-icon icon="tachometer-alt" class="mr-2" />Dashboard</b-nav-item>
           <b-nav-item href="/#/archive" class="mr-3"><font-awesome-icon icon="archive" class="mr-2" />Archive</b-nav-item>
+          <b-nav-item href="/#/data-explorer" class="mr-3"><font-awesome-icon icon="archive" class="mr-2" />Data Explorer</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->

@@ -21,6 +21,7 @@ import { faTh } from '@fortawesome/free-solid-svg-icons'
 import { faShieldAlt } from '@fortawesome/free-solid-svg-icons'
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
 import { faClipboard } from '@fortawesome/free-solid-svg-icons'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import HighchartsVue from 'highcharts-vue'
 import Msg from 'vue-message'
@@ -45,6 +46,7 @@ library.add(faTh)
 library.add(faShieldAlt)
 library.add(faSignOutAlt)
 library.add(faClipboard)
+library.add(faSearch)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false
 
