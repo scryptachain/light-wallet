@@ -114,7 +114,7 @@
         <b-col md="12">
           <b-card title="Latest transactions" border-variant="light" class="mb-3 mt-3 shadow-sm">
             <div v-if="!noTransactions">
-              <b-table :current-page="currentPage" :per-page="10" responsive hover :items="items" sort-by="date" />
+              <b-table :current-page="currentPage" :per-page="10" responsive hover :items="items" sort-by="date DESC" />
               <b-pagination v-model="currentPage" :total-rows="countTransactions" :per-page="10"></b-pagination>
             </div>
             <div v-if="noTransactions">{{ transactionMessage }}</div>
@@ -230,11 +230,9 @@ export default {
       var app = this;
       if (app.public_address !== "") {
         app.axios
-          .post("https://" + app.connected + "/getbalance", {
-            address: app.public_address
-          })
+          .get("https://microexplorer.scryptachain.org/balance/" + app.public_address)
           .then(function(response) {
-            app.address_balance = response.data.data + " LYRA";
+            app.address_balance = response.data.balance + " LYRA";
           })
           .catch(function() {
             alert("Seems there's a problem, please retry or change node!");
@@ -243,19 +241,30 @@ export default {
     },
     fetchTransactions() {
       var app = this;
-      app.axios
-        .post("https://" + app.connected + "/transactions", {
-          address: app.public_address
-        })
-        .then(function(response) {
-          app.items = response.data.data;
-          app.countTransactions = response.data.data.length;
-          if (response.data.data.length > 0) {
-            app.noTransactions = false;
-          } else {
-            app.transactionMessage = "No transactions.";
-          }
-        });
+      if(app.public_address !== undefined && app.public_address !== ''){
+        app.axios
+          .get("https://microexplorer.scryptachain.org/transactions/" + app.public_address)
+          .then(function(response) {
+            for(var i = 0; i < response.data.data.length; i++ ){
+              var d = new Date(response.data.data[i].time * 1000)
+              var date = d.getDate()+'/'+d.getMonth()+'/'+d.getFullYear()+' '+d.getHours()+':'+d.getMinutes()
+              var tx = {
+                date: date,
+                from: response.data.data[i].from[0],
+                value: response.data.data[i].value + ' LYRA',
+                txid: response.data.data[i].txid,
+                block: response.data.data[i].blockheight
+              }
+              app.items.push(tx)
+            }
+            app.countTransactions = response.data.data.length;
+            if (response.data.data.length > 0) {
+              app.noTransactions = false;
+            } else {
+              app.transactionMessage = "No transactions.";
+            }
+          });
+      }
     },
     fetchGraph() {
       var app = this;

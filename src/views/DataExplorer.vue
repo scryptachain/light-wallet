@@ -12,7 +12,7 @@
       <b-row>
         <b-col md="6" lg="8" v-if="readreturn">
           <b-input-group>
-            <b-form-input placeholder="Enter a public adress, an unique identifier or a title to search"></b-form-input>
+            <b-form-input placeholder="Enter a public address to search" v-model="search_address"></b-form-input>
             <b-input-group-append>
               <b-button size="sm" text="Button" variant="primary"><font-awesome-icon icon="search" class="ml-3 mr-3" /></b-button>
             </b-input-group-append>
@@ -23,10 +23,6 @@
             <!-- <b-form-checkbox switch v-model="decryptRead" name="check-button">Decrypt data</b-form-checkbox> -->
               <b-button v-if="viewGrid" size="sm" variant="light" :pressed.sync="viewGrid" class="text-center mt-1"><font-awesome-icon icon="th" /></b-button>
               <b-button v-if="!viewGrid" size="sm" variant="light" :pressed.sync="viewGrid" class="text-center mt-1"><font-awesome-icon icon="list" /></b-button>
-          </div>
-          <div class="float-right">
-            <b-button size="sm" variant="primary" v-b-modal.uploadModal class="text-center mt-1 mr-2"><font-awesome-icon icon="upload" class="mr-2" />Upload</b-button>
-            <b-button size="sm" variant="primary" @click.prevent="readData" class="text-center mt-1"><font-awesome-icon icon="sync" class="mr-2" />Refresh</b-button>
           </div>
         </b-col>
       </b-row>
@@ -154,29 +150,23 @@ export default {
       readData () {
         const app = this
         app.readerror = ''
-        if(app.decryptRead === true && app.api_secret === ''){
-          app.openUnlockWallet()
-        }else{
-          app.axios
-            .post('https://' + app.connected + '/read', {
-              api_secret: app.api_secret,
-              decrypt: app.decryptRead,
-              address: app.public_address,
-              history: false
-            })
-            .then(function (response) {
-              if(response.data.data !== "Provide api Secret first."){
-                app.readreturn = response.data.data
-                for(var i=0; i < app.readreturn.length; i++ ){
-                  if(app.readreturn[i].is_file === true){
-                    var hash = app.readreturn[i].ipfshash
-                    app.retrieveInfo(hash,i)
-                  }
+        app.axios
+          .post('https://' + app.connected + '/read', {
+            address: app.search_address,
+            history: false
+          })
+          .then(function (response) {
+            if(response.data.data !== "Provide api Secret first."){
+              app.readreturn = response.data.data
+              for(var i=0; i < app.readreturn.length; i++ ){
+                if(app.readreturn[i].is_file === true){
+                  var hash = app.readreturn[i].ipfshash
+                  app.retrieveInfo(hash,i)
                 }
-                app.returnTableItems()
               }
-            })
-        }
+              app.returnTableItems()
+            }
+          })
       },
       retrieveInfo (hash, i) {
         const app = this
@@ -220,6 +210,7 @@ export default {
       api_secret: '',
       readreturn: [],
       tableItems: [],
+      search_address: '',
       tableFields: [
         { key: 'uuid', label: 'Unique Identifier', class: 'text-left' },
         { key: 'title', label: 'Title', class: 'text-left' },
