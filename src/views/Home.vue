@@ -68,12 +68,16 @@
         <h3 class="display-5">Please choose a method:</h3><br>
         <a v-on:click="downloadWallet" class="btn btn-primary" href="#">Store the .sid file in your device</a><br><br>
         <a @click.prevent="openUnlockWallet" class="btn btn-primary" href="#">Print paper wallet</a><br><br>
-        <a @click.prevent="openUnlockWallet" class="btn btn-primary" href="#">Sync to mobile app</a>
+        <a @click.prevent="openUnlockWalletSync" class="btn btn-primary" href="#">Sync to mobile app</a>
       </b-modal>
       <b-modal v-model="passwordShow" hide-footer title="Unlock your wallet first">
         <b-form-input v-model="unlockPwd" type="password" placeholder="Enter wallet password"></b-form-input>
         <br>
         <div @click.prevent="unlockWallet" class="btn btn-primary">UNLOCK WALLET</div>
+      </b-modal>
+      <b-modal v-model="passwordShowSync" hide-footer title="Sync mobile app">
+        Open Manent app and click "Restore paper wallet", then scan this QR code.<br>
+        <img :src="public_qrcode_sync" width="100%">
       </b-modal>
       <b-row>
         <b-col md="4" class="mb-3 text-left">
@@ -160,6 +164,9 @@ export default {
         this.encrypted_wallet = this.scrypta.RAWsAPIKey;
         var qr = new QRious({ value: this.scrypta.PubAddress, size: 500 });
         this.public_qrcode = qr.toDataURL();
+
+        qr = new QRious({ value: this.scrypta.PubAddress + ':' + this.scrypta.RAWsAPIKey, size: 500 });
+        this.public_qrcode_sync = qr.toDataURL();
         this.explorer_url =
           "https://chainz.cryptoid.info/lyra/address.dws?" +
           this.scrypta.PubAddress +
@@ -261,6 +268,9 @@ export default {
           app.chartOptions.series[0].data = response.data.prices
         });
     },
+    openUnlockWalletSync() {
+      this.passwordShowSync = true;
+    },
     openUnlockWallet() {
       this.passwordShow = true;
     },
@@ -361,9 +371,11 @@ export default {
       createPwdRepeat: "",
       public_address: "",
       public_qrcode: "",
+      public_qrcode_sync: "",
       address_balance: "BALANCE UNKNOWN",
       explorer_url: "",
       passwordShow: false,
+      passwordShowSync: false,
       importShow: false,
       decrypted_wallet: "",
       transactionMessage: "Loading transactions...",
