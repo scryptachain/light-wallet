@@ -10,9 +10,9 @@
         <h2>Send LYRA</h2>
       </div> -->
       <b-col>
-        <b-form-group id="adress" label="Adress" label-for="adressInput">
+        <b-form-group id="address" label="Address" label-for="addressInput">
           <b-form-input
-            id="adressInput"
+            id="addressInput"
             type="text"
             v-model="addressToSend"
             required
@@ -26,6 +26,7 @@
             required
             placeholder="Amount you mean to send" />
         </b-form-group>
+        <!--
         <b-form-group id="message" label="Message" label-for="messageTextarea">
           <b-form-textarea
             id="messageTextarea"
@@ -35,6 +36,7 @@
             max-rows="6"
           />
         </b-form-group>
+        -->
         <button v-if="!isSending" class="btn btn-primary float-right mt-3 mb-3" @click.prevent="openUnlockWallet">SEND</button>
       </b-col>
     </b-row>
@@ -47,33 +49,14 @@
 <script>
 export default {
   name: 'send',
-  mounted : function(){
-    this.checkIdaNodes()
+  mounted : async function(){
+    this.connected = await this.scrypta.connectNode()
     this.checkUser()
   },
   methods: {
-      checkIdaNodes(){
-        var checknodes = this.scrypta.returnNodes()
-        const app = this
-        for(var i = 0; i < checknodes.length; i++){
-          this.axios.get('https://' + checknodes[i] + '/check')
-          .then(function (response) {
-             app.nodes.push(response.data.name)
-             if(i == checknodes.length){
-               app.connectToNode()
-             }
-          });
-        }
-      },
-      connectToNode(){
-        var app = this
-        if(app.connected == ''){
-          app.connected = app.nodes[Math.floor(Math.random()*app.nodes.length)];
-        }
-      },
       checkUser(){
-        if(this.scrypta.keyExsist()){
-          this.$emit('onFoundUser', this.scrypta.keyExsist(), this.scrypta.RAWsAPIKey)
+        if(this.scrypta.keyExist()){
+          this.$emit('onFoundUser', this.scrypta.keyExist(), this.scrypta.RAWsAPIKey)
           this.public_address = this.scrypta.PubAddress;
           this.encrypted_wallet = this.scrypta.RAWsAPIKey;
         }
@@ -108,27 +91,15 @@ export default {
         if(app.isSending === false){
           if(app.messageToSend.length <= 80){
             app.isSending = true;
-            app.axios
-              .post('https://' + app.connected + '/send', {
-                from: app.public_address,
-                to: app.addressToSend,
-                amount: app.amountToSend,
-                private_key: app.private_key,
-                message: app.messageToSend
-              })
-              .then(function (response) {
-                if(response.data.data.success === true){
-                  alert('Funds sent correctly, here the txid: ' + response.data.data.txid);
-                  app.addressToSend = '';
-                  app.amountToSend = '';
-                  app.messageToSend = '';
-                  app.private_key = '';
-                  app.unlockPwd = '';
-                  app.isSending = false;
-                }else{
-                  alert('Something goes wrong: ' + response.data.data.walletresponse.error);
-                }
-              })
+            app.scrypta.send(app.unlockPwd, app.addressToSend, parseFloat(app.amountToSend), '', app.public_address+ ':' +app.encrypted_wallet).then(response => {
+              alert('Send was successful, TXID is: ' + response)
+              app.addressToSend = '';
+              app.amountToSend = '';
+              app.messageToSend = '';
+              app.private_key = '';
+              app.unlockPwd = '';
+              app.isSending = false;
+            })
           }else{
             alert('Message is too long!')
           }

@@ -12,9 +12,9 @@
       <b-row>
         <b-col md="6" lg="8" v-if="readreturn">
           <b-input-group>
-            <b-form-input placeholder="Enter a public address to search" v-model="search_address"></b-form-input>
+            <b-form-input placeholder="Enter a public address to search"  v-on:change="searchByAddress" v-model="search_address"></b-form-input>
             <b-input-group-append>
-              <b-button size="sm" text="Button" variant="primary"><font-awesome-icon icon="search" class="ml-3 mr-3" /></b-button>
+              <b-button size="sm" v-on:click="searchByAddress" text="Button" variant="primary"><font-awesome-icon icon="search" class="ml-3 mr-3" /></b-button>
             </b-input-group-append>
           </b-input-group>
         </b-col>
@@ -27,7 +27,7 @@
         </b-col>
       </b-row>
       <b-row class="mt-3" v-if="!viewGrid">
-        <b-col lg="4" v-for="item in readreturn" :key="item.uuid" class="text-left mb-3" style="-webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto;">
+        <b-col lg="6" v-for="item in readreturn" :key="item.uuid" class="text-left mb-3" style="-webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto;">
           <b-card border-variant="light" class="mb-3 mt-3 shadow-sm">
             <b-card-body>
               <div class="mb-1">
@@ -36,6 +36,7 @@
               </div>
               <!-- <div v-if="item.collection !== ''" class="mb-1"><small class="text-muted">Collection:</small><br/>{{ item.collection }}</div>
               <div v-if="item.refID !== ''" class="mb-1"><small class="text-muted">Reference:</small><br />{{ item.refID }}</div> -->
+              <div class="mb-1"><small class="text-muted">Address:</small><br/>{{ item.address }}</div>
               <div class="mb-1"><small class="text-muted">Unique identifier:</small><br/>{{ item.uuid }}</div>
               <div class="mb-1"><small class="text-muted">Block</small><br />{{ item.block }}</div>
               <div v-if="item.text" class="mb-1"><small class="text-muted">Text</small><br />{{ item.text }}</div>
@@ -50,9 +51,10 @@
                   <img v-bind:src="item.data" width="100%">
                 </div>
               </div>
-              <div v-if="!item.mimetype || item.mimetype === 'text'" class="mb-1">
+              <div v-if="!item.mimetype || item.mimetype === 'text'" style="font-size:12px" class="mb-1">
                 {{ item.data }}
               </div>
+              <a :href="'https://proof.scryptachain.org/#/uuid/' + item.uuid" target="_blank"><b-button size="sm" style="margin-top:20px; width:100%" class="mr-1">Show details</b-button></a>
             </b-card-body>
           </b-card>
 
@@ -69,12 +71,6 @@
             :sort-by.sync="sortBy"
             :sort-desc.sync="sortDesc"
           >
-            <template slot="actions">
-              <b-button size="sm" class="mr-1">Show</b-button>
-            </template>
-            <template slot="dataModal">
-              <b-modal v-model="passwordShow" hide-footer title="Record content">{ row.data }</b-modal>
-            </template>
           </b-table>
         </b-col>
       </b-row>
@@ -87,76 +83,33 @@ import Upload from './Upload'
 
 export default {
   name: 'home',
-  mounted : function(){
-    this.checkIdaNodes()
+  mounted : async function(){
+    this.connected = await this.scrypta.connectNode()
     this.checkUser()
+    this.readData()
   },
   components: {
     Upload
   },
   methods: {
-      checkIdaNodes(){
-        var checknodes = this.scrypta.returnNodes()
-        const app = this
-        for(var i = 0; i < checknodes.length; i++){
-          this.axios.get('https://' + checknodes[i] + '/check')
-          .then(function (response) {
-             app.nodes.push(response.data.name)
-             if(i == checknodes.length){
-               app.connectToNode()
-             }
-          });
-        }
-      },
-      connectToNode(){
-        var app = this
-        if(app.connected == ''){
-          app.connected = app.nodes[Math.floor(Math.random()*app.nodes.length)];
-          app.readData()
-        }
-      },
       checkUser(){
-        if(this.scrypta.keyExsist()){
-          this.$emit('onFoundUser', this.scrypta.keyExsist(), this.scrypta.RAWsAPIKey)
+        if(this.scrypta.keyExist()){
+          this.$emit('onFoundUser', this.scrypta.keyExist(), this.scrypta.RAWsAPIKey)
           this.public_address = this.scrypta.PubAddress
           this.encrypted_wallet = this.scrypta.RAWsAPIKey
         }
       },
-      openUnlockWallet(){
-        if (this.fileToUpload !== '') {
-          this.passwordShow = true
-        }else{
-          alert('Select a file first!')
-        }
-      },
-      unlockWallet(){
-        if(this.unlockPwd !== ''){
-          var app = this
-          app.decrypted_wallet = 'WALLET LOCKED'
-          app.scrypta.readKey(this.unlockPwd).then(function (response) {
-            if(response !== false){
-              app.private_key = response.prv
-              app.api_secret = response.api_secret
-              app.passwordShow = false
-              app.readData()
-            }else{
-              alert('Wrong password!')
-            }
-          })
-        }else{
-          alert('Write your password first')
-        }
-      },
-      readData () {
+      searchByAddress () {
         const app = this
         app.readerror = ''
-        app.axios
-          .post('https://' + app.connected + '/read', {
-            address: app.search_address,
-            history: false
-          })
-          .then(function (response) {
-            if(response.data.data !== "Provide api Secret first."){
+        if(app.search_address !== ''){
+          app.axios
+            .post(app.connected + '/read', {
+              limit: 50,
+              address: app.search_address,
+              history: false
+            })
+            .then(function (response) {
               app.readreturn = response.data.data
               for(var i=0; i < app.readreturn.length; i++ ){
                 if(app.readreturn[i].is_file === true){
@@ -165,18 +118,39 @@ export default {
                 }
               }
               app.returnTableItems()
+            })
+        }else{
+          app.readData()
+        }
+      },
+      readData () {
+        const app = this
+        app.readerror = ''
+        app.axios
+          .post(app.connected + '/read', {
+            limit: 50,
+            history: false
+          })
+          .then(function (response) {
+            app.readreturn = response.data.data
+            for(var i=0; i < app.readreturn.length; i++ ){
+              if(app.readreturn[i].is_file === true){
+                var hash = app.readreturn[i].data
+                app.retrieveInfo(hash,i)
+              }
             }
+            app.returnTableItems()
           })
       },
       retrieveInfo (hash, i) {
         const app = this
-        app.axios.post('https://' + app.connected + '/ipfs/retrieve', {
-          hash: hash
-        })
+        app.axios.get(app.connected + '/ipfs/type/' + hash)
         .then(function (response) {
-            app.readreturn[i].mimetype = response.data.data.type
-            app.readreturn[i].mimedetail = response.data.data.detai
-            app.$forceUpdate()
+            if(response.data.type !== undefined){
+              app.readreturn[i].mimetype = response.data.type
+              app.readreturn[i].mimedetail = response.data.detail
+              app.$forceUpdate()
+            }
         })
       },
       returnTableItems() {
@@ -185,6 +159,8 @@ export default {
           app.tableItems.push({
               uuid: app.readreturn[i].uuid,
               block: app.readreturn[i].block,
+              address: app.readreturn[i].address,
+              title: app.readreturn[i].refID,
               date: app.$moment.unix(app.readreturn[i].time).format("hh:mm a, MM/DD/YYYY"),
               data: app.readreturn[i].data,
           })
@@ -213,15 +189,13 @@ export default {
       search_address: '',
       tableFields: [
         { key: 'uuid', label: 'Unique Identifier', class: 'text-left' },
-        { key: 'title', label: 'Title', class: 'text-left' },
         { key: 'address', label: 'Public Address', class: 'text-left' },
         { key: 'block', label: 'Block', class: 'text-left' },
-        { key: 'date', label: 'Date', sortDirection: 'desc', class: 'text-left' },
-        { key: 'actions', label: 'Actions', class: 'text-right' }
+        { key: 'date', label: 'Date', sortDirection: 'desc', class: 'text-left' }
       ],
-      sortBy: 'date',
+      sortBy: 'block',
       sortDesc: true,
-      viewGrid: true,
+      viewGrid: false,
       chooseViewIcon: "upload",
     }
   }

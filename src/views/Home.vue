@@ -64,10 +64,11 @@
       </b-row>
     </b-container>
     <b-container fluid v-if="user">
-      <b-modal class="bg-danger" title="Backup your .sid file" v-model="backupAlert">
-        <h3 class="display-5">Please stay safe and make a backup.</h3>
-        <a v-on:click="downloadWallet" href="#">Store it in your device</a> or
-        <a @click.prevent="openUnlockWallet" href="#">print it</a>.
+      <b-modal class="bg-danger text-center" title="Backup your .sid file" v-model="backupAlert">
+        <h3 class="display-5">Please choose a method:</h3><br>
+        <a v-on:click="downloadWallet" class="btn btn-primary" href="#">Store the .sid file in your device</a><br><br>
+        <a @click.prevent="openUnlockWallet" class="btn btn-primary" href="#">Print paper wallet</a><br><br>
+        <a @click.prevent="openUnlockWallet" class="btn btn-primary" href="#">Sync to mobile app</a>
       </b-modal>
       <b-modal v-model="passwordShow" hide-footer title="Unlock your wallet first">
         <b-form-input v-model="unlockPwd" type="password" placeholder="Enter wallet password"></b-form-input>
@@ -93,7 +94,7 @@
         <b-col md="4" class="text-right mt-3">
           <b-button size="sm" variant="primary" v-on:click="showBackup" class="text-center mr-2">
             <font-awesome-icon icon="shield-alt" class="mr-1"/>
-            Backup Wallet
+            Backup or Sync
           </b-button>
           <b-button size="sm" variant="primary" v-b-modal.sendModal class="text-center mr-2">
             <font-awesome-icon icon="wallet" class="mr-2"/>Send
@@ -132,10 +133,10 @@ const QRious = require("qrious");
 
 export default {
   name: "home",
-  mounted: function() {
+  mounted: async function() {
     const app = this;
     this.fetchGraph();
-    this.checkIdaNodes();
+    this.connected = await this.scrypta.connectNode();
     this.checkUser();
     setTimeout(function() {
       app.backupAlert = false;
@@ -148,33 +149,11 @@ export default {
     showBackup(){
       this.backupAlert = true
     },
-    checkIdaNodes() {
-      var checknodes = this.scrypta.returnNodes();
-      const app = this;
-      for (var i = 0; i < checknodes.length; i++) {
-        this.axios
-          .get("https://" + checknodes[i] + "/check")
-          .then(function(response) {
-            app.nodes.push(response.data.name);
-            if (i == checknodes.length) {
-              app.connectToNode();
-            }
-          });
-      }
-    },
-    connectToNode() {
-      var app = this;
-      if (app.connected == "") {
-        app.connected = app.nodes[Math.floor(Math.random() * app.nodes.length)];
-        app.checkBalance();
-        app.fetchTransactions();
-      }
-    },
     checkUser() {
-      if (this.scrypta.keyExsist()) {
+      if (this.scrypta.keyExist()) {
         this.$emit(
           "onFoundUser",
-          this.scrypta.keyExsist(),
+          this.scrypta.keyExist(),
           this.scrypta.RAWsAPIKey
         );
         this.public_address = this.scrypta.PubAddress;
@@ -185,6 +164,8 @@ export default {
           "https://chainz.cryptoid.info/lyra/address.dws?" +
           this.scrypta.PubAddress +
           ".htm";
+        this.checkBalance()
+        this.fetchTransactions()
       }
     },
     openImportWallet() {
@@ -211,7 +192,7 @@ export default {
           .createAddress(this.createPwd, true)
           .then(function(response) {
             app.axios
-              .post("https://" + app.connected + "/init", {
+              .post(app.connected + "/init", {
                 address: response.pub,
                 api_secret: response.api_secret
               })
@@ -230,7 +211,7 @@ export default {
       var app = this;
       if (app.public_address !== "") {
         app.axios
-          .get("https://microexplorer.scryptachain.org/balance/" + app.public_address)
+          .get(app.connected + "/balance/" + app.public_address)
           .then(function(response) {
             app.address_balance = response.data.balance + " LYRA";
           })
@@ -247,11 +228,17 @@ export default {
           .then(function(response) {
             for(var i = 0; i < response.data.data.length; i++ ){
               var d = new Date(response.data.data[i].time * 1000)
-              var date = d.getDate()+'/'+d.getMonth()+'/'+d.getFullYear()+' '+d.getHours()+':'+d.getMinutes()
+              var date = d.toLocaleDateString() + ' at ' + d.toLocaleTimeString() 
+              var recipient
+              if(response.data.data[i].value > 0){
+                recipient = response.data.data[i].from[0]
+              }else{
+                recipient = response.data.data[i].to[0]
+              }
               var tx = {
                 date: date,
-                from: response.data.data[i].from[0],
-                value: response.data.data[i].value + ' LYRA',
+                recipient: recipient,
+                value: response.data.data[i].value.toFixed(4) + ' LYRA',
                 txid: response.data.data[i].txid,
                 block: response.data.data[i].blockheight
               }

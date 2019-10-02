@@ -5,17 +5,17 @@
       <b-form-input v-model="unlockPwd" type="password" placeholder="Enter wallet password"></b-form-input><br>
       <div @click.prevent="unlockWallet" class="btn btn-primary">UNLOCK WALLET</div>
     </b-modal>
-    <b-modal id="uploadModal" title="Upload data" hide-footer>
-      <Upload />
+    <b-modal id="uploadModal" ref="upload-modal" title="Upload data" hide-footer>
+      <Upload @hide-upload="hideModalUpload" />
     </b-modal>
     <b-container fluid>
       <b-row>
         <b-col v-if="readreturn">
+          <!--
           <div style="float:left">
-            <!-- <b-form-checkbox switch v-model="decryptRead" name="check-button">Decrypt data</b-form-checkbox> -->
               <b-button v-if="viewGrid" size="sm" variant="light" :pressed.sync="viewGrid" class="text-center"><font-awesome-icon icon="th" /></b-button>
               <b-button v-if="!viewGrid" size="sm" variant="light" :pressed.sync="viewGrid" class="text-center"><font-awesome-icon icon="list" /></b-button>
-          </div>
+          </div> -->
           <div style="float:right">
             <b-button size="sm" variant="primary" v-b-modal.uploadModal class="text-center mr-2"><font-awesome-icon icon="upload" class="mr-2" />Upload</b-button>
             <b-button size="sm" variant="primary" @click.prevent="readData" class="text-center"><font-awesome-icon icon="sync" class="mr-2" />Refresh</b-button>
@@ -23,7 +23,7 @@
         </b-col>
       </b-row>
       <b-row class="mt-3" v-if="!viewGrid">
-        <b-col lg="4" v-for="item in readreturn" :key="item.uuid" class="text-left mb-3" style="-webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto;">
+        <b-col lg="6" v-for="item in readreturn" :key="item.uuid" class="text-left mb-3" style="-webkit-hyphens: auto; -moz-hyphens: auto; hyphens: auto;">
           <b-card border-variant="light" class="mb-3 mt-3 shadow-sm">
             <b-card-body>
               <div class="mb-1">
@@ -46,9 +46,10 @@
                   <img v-bind:src="item.data" width="100%">
                 </div>
               </div>
-              <div v-if="!item.mimetype || item.mimetype === 'text'" class="mb-1">
+              <div v-if="!item.mimetype || item.mimetype === 'text'" style="font-size:12px" class="mb-1">
                 {{ item.data }}
               </div>
+              <a :href="'https://proof.scryptachain.org/#/uuid/' + item.uuid" target="_blank"><b-button size="sm" style="margin-top:20px; width:100%" class="mr-1">Show details</b-button></a>
             </b-card-body>
           </b-card>
 
@@ -65,49 +66,14 @@
             :sort-by.sync="sortBy"
             :sort-desc.sync="sortDesc"
           >
-            <template slot="actions">
-              <b-button size="sm" class="mr-1">Show</b-button>
-            </template>
             <template slot="dataModal">
               <b-modal v-model="passwordShow" hide-footer title="Record content">{ row.data }</b-modal>
             </template>
           </b-table>
         </b-col>
       </b-row>
+      <div class="row" v-if="isLoading"><div class="col-12 text-center">Loading data, please wait...</div></div>
     </b-container>
-
-    <!-- <b-card-group columns>
-      <b-card
-         v-for="item in readreturn"
-         :key="item.uuid"
-      >
-        <b-card-header>
-          <small class="text-muted mr-3"><font-awesome-icon icon="clock" class="mr-1" />{{ item.time | moment("h:mm a") }}</small>
-          <small class="text-muted"><font-awesome-icon icon="calendar" class="mr-1" />{{ item.time | moment("dddd, MMMM Do YYYY") }}</small>
-        </b-card-header>
-        <b-card-text>
-          <div v-if="item.collection !== ''" class="mb-1"><small class="text-muted">Collection:</small><br/>{{ item.collection }}</div>
-          <div v-if="item.refID !== ''" class="mb-1"><small class="text-muted">Reference:</small><br />{{ item.refID }}</div>
-          <div class="mb-1"><small class="text-muted">Unique identifier:</small><br/>{{ item.uuid }}</div>
-          <div class="mb-1"><small class="text-muted">Block</small><br />{{ item.block }}</div>
-          <div v-if="item.text" class="mb-1"><small class="text-muted">Text</small><br />{{ item.text }}</div>
-          <div v-if="item.mimetype" class="mb-1">
-            <div v-if="item.mimetype === 'audio'">
-              <audio controls style="width:100%">
-                <source v-bind:src="item.data" type="audio/mpeg">
-                Your browser does not support the audio element.
-              </audio>
-            </div>
-            <div v-if="item.mimetype === 'image'">
-              <img v-bind:src="item.data" width="100%">
-            </div>
-          </div>
-          <div v-if="!item.mimetype" class="mb-1">
-            {{ item.data }}
-          </div>
-        </b-card-text>
-      </b-card>
-    </b-card-group> -->
   </div>
 </template>
 
@@ -116,37 +82,21 @@ import Upload from './Upload'
 
 export default {
   name: 'home',
-  mounted : function(){
-    this.checkIdaNodes()
-    this.checkUser()
+  mounted : async function(){
+    this.connected = await this.scrypta.connectNode()
+    await this.checkUser()
+    this.readData()
   },
   components: {
     Upload
   },
   methods: {
-      checkIdaNodes(){
-        var checknodes = this.scrypta.returnNodes()
-        const app = this
-        for(var i = 0; i < checknodes.length; i++){
-          this.axios.get('https://' + checknodes[i] + '/check')
-          .then(function (response) {
-             app.nodes.push(response.data.name)
-             if(i == checknodes.length){
-               app.connectToNode()
-             }
-          });
-        }
-      },
-      connectToNode(){
-        var app = this
-        if(app.connected == ''){
-          app.connected = app.nodes[Math.floor(Math.random()*app.nodes.length)];
-          app.readData()
-        }
+      hideModalUpload(){
+        this.$refs['upload-modal'].hide()
       },
       checkUser(){
-        if(this.scrypta.keyExsist()){
-          this.$emit('onFoundUser', this.scrypta.keyExsist(), this.scrypta.RAWsAPIKey)
+        if(this.scrypta.keyExist()){
+          this.$emit('onFoundUser', this.scrypta.keyExist(), this.scrypta.RAWsAPIKey)
           this.public_address = this.scrypta.PubAddress
           this.encrypted_wallet = this.scrypta.RAWsAPIKey
         }
@@ -183,18 +133,19 @@ export default {
           app.openUnlockWallet()
         }else{
           app.axios
-            .post('https://' + app.connected + '/read', {
+            .post(app.connected + '/read', {
               api_secret: app.api_secret,
               decrypt: app.decryptRead,
               address: app.public_address,
               history: false
             })
             .then(function (response) {
+              app.isLoading = false
               if(response.data.data !== "Provide api Secret first."){
                 app.readreturn = response.data.data
                 for(var i=0; i < app.readreturn.length; i++ ){
                   if(app.readreturn[i].is_file === true){
-                    var hash = app.readreturn[i].ipfshash
+                    var hash = app.readreturn[i].data
                     app.retrieveInfo(hash,i)
                   }
                 }
@@ -205,13 +156,13 @@ export default {
       },
       retrieveInfo (hash, i) {
         const app = this
-        app.axios.post('https://' + app.connected + '/ipfs/retrieve', {
-          hash: hash
-        })
+        app.axios.get(app.connected + '/ipfs/type/' + hash)
         .then(function (response) {
-            app.readreturn[i].mimetype = response.data.data.type
-            app.readreturn[i].mimedetail = response.data.data.detai
-            app.$forceUpdate()
+            if(response.data.type !== undefined){
+              app.readreturn[i].mimetype = response.data.type
+              app.readreturn[i].mimedetail = response.data.detail
+              app.$forceUpdate()
+            }
         })
       },
       returnTableItems() {
@@ -241,6 +192,7 @@ export default {
       decrypted_wallet: 'WALLET LOCKED',
       unlockPwd: '',
       public_address: '',
+      isLoading: true,
       decryptRead: false,
       api_secret: '',
       readreturn: [],
@@ -248,8 +200,7 @@ export default {
       tableFields: [
         { key: 'uuid', label: 'Unique Identifier', class: 'text-left' },
         { key: 'block', label: 'Block', class: 'text-left' },
-        { key: 'date', label: 'Date', sortDirection: 'desc', class: 'text-left' },
-        { key: 'actions', label: 'Actions', class: 'text-right' }
+        { key: 'date', label: 'Date', sortDirection: 'desc', class: 'text-left' }
       ],
       sortBy: 'date',
       sortDesc: true,
