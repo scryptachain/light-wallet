@@ -21,7 +21,6 @@
       <b-row class="justify-content-center pt-5">
         <b-col xs="10" md="4" class="text-center">
           <img src="../assets/logo.png">
-          <h1 class="displa-5 mt-2">Manent</h1>
         </b-col>
       </b-row>
       <b-row class="justify-content-center">
