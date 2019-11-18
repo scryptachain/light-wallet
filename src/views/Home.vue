@@ -230,7 +230,7 @@ export default {
       var app = this;
       if(app.public_address !== undefined && app.public_address !== ''){
         app.axios
-          .get("https://microexplorer.scryptachain.org/transactions/" + app.public_address)
+          .get(app.connected + "/transactions/" + app.public_address)
           .then(function(response) {
             for(var i = 0; i < response.data.data.length; i++ ){
               var d = new Date(response.data.data[i].time * 1000)
