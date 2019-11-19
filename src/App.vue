@@ -8,14 +8,14 @@
 
         <b-navbar-nav variant="primary">
           <b-nav-item href="/#/" class="mr-3"><font-awesome-icon icon="tachometer-alt" class="mr-2" />Dashboard</b-nav-item>
-          <b-nav-item href="/#/data-explorer" class="mr-3"><font-awesome-icon icon="search" class="mr-2" />Data Explorer</b-nav-item>
-          <b-nav-item href="/#/archive" class="mr-3"><font-awesome-icon icon="archive" class="mr-2" />Vault</b-nav-item>
+          <b-nav-item href="/#/data-explorer" class="mr-3"><font-awesome-icon icon="search" class="mr-2" />{{ translations.ui.data_explorer }}</b-nav-item>
+          <b-nav-item href="/#/archive" class="mr-3"><font-awesome-icon icon="archive" class="mr-2" />{{ translations.ui.vault }}</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
 
-          <b-nav-item v-if="user" href="#" @click.prevent="logoutUser"><font-awesome-icon icon="sign-out-alt" class="mr-2" />Logout</b-nav-item>
+          <b-nav-item v-if="user" href="#" @click.prevent="logoutUser"><font-awesome-icon icon="sign-out-alt" class="mr-2" />{{ translations.ui.logout }}</b-nav-item>
 
         </b-navbar-nav>
 
@@ -23,11 +23,12 @@
     </b-navbar>
     <router-view :user="user" :rawapikey="rawapikey" v-on:onFoundUser="changeUser" class="pt-3"/>
     <div class="text-center footer bg-light">
-      Open Source Project developed by <a href="https://scryptachain.org" target="_blank">Scrypta Task Force</a>.
+      {{ translations.ui.footer_description }} <a href="https://scryptachain.org" target="_blank">Scrypta Task Force</a>.
     </div>
   </div>
 </template>
 <script>
+  import locales from './locales.js'
 
   export default {
     name: 'appview',
@@ -35,8 +36,14 @@
       return {
         user: null,
         rawapikey: null,
+        translations: locales['en'],
         scrypta: window.ScryptaCore
       }
+    },
+    mounted(){
+      const app = this
+      let language = 'en'
+      app.translations = locales[language]
     },
     methods: {
       changeUser: function (user,rawapikey) {
