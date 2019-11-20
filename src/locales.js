@@ -150,10 +150,10 @@ export default {
             your_address: 'Il tuo indirizzo',
             copy_address: 'Copia indirizzo negli appunti',
             import_wallet: 'Importa un indirizzo',
-            drag_drop: 'Rilascia qui il file .sid o selezionalo',
+            drag_drop: 'Rilascia qui il file .sid o importalo',
             drop: 'Rilascia file qui...',
             send_lyra: 'Invia LYRA',
-            main_description: "Scrypta Manent is an application that you can use as a Wallet in Cloud, which will allow you to send and receive LYRA. You can also use it to upload files directly into the blockchain and encrypt them, thanks to IPFS technology and IdANodes. You have to make a backup. Please remind, you are ONLY responsible for this .sid file and password associated. No one will have to copy or to rescue it, so keep it safe.",
+            main_description: "Scrypta Manent Web è un'applicazione che puoi utilizzare come Wallet in Cloud e che ti permette di inviare e ricevere LYRA. Puoi anche usarlo per archiviare file e documenti in blockchain e crittografarli, grazie alla tecnologia IPFS e IdANodes. Importante: fai un backup e ricorda che sei il SOLO responsabile per questo file .sid e la password associati. Tienilo al sicuro.",
             create_wallet: 'Crea un nuovo wallet',
             enter_password: "Inserisci una password robusta e non dimenticarla!",
             repeat_password: "Ripeti nuovamente la password.",
@@ -170,11 +170,11 @@ export default {
             sync_app_description: 'Apri l\'app Manent e clicca su "Restore paper wallet", quindi scannerizza il QR code.',
             sync_app_title: 'Sincronizza l\'app mobile',
             backup_or_sync: 'Backup o Sincronizzazione',
-            no_transactions: 'Nessuna transazione.',
+            no_transactions: 'Nessuna transazione disponibile.',
             paper_wallet_description: "Questo è il tuo paper wallet. Stampalo e non condividere queste informazioni con nessuno.",
             address_copied: 'L\'indirizzo è stato copiato',
             address_copy_error: 'Qualcosa è andato storto, copia non riuscita',
-            loading_transactions: "Carico transazioni..."
+            loading_transactions: "Caricamento delle transazioni..."
         },
     },
 };
