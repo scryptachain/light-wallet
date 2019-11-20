@@ -1,10 +1,10 @@
 <template>
     <!-- <b-badge class="node-badge" v-if="connected" variant="success">{{ connected }}</b-badge> -->
     <b-container fluid class="text-left">
-      <b-modal v-model="passwordShow" hide-footer title="Unlock your wallet first">
-        <b-form-input v-model="unlockPwd" type="password" placeholder="Enter wallet password"></b-form-input><br>
-        <div @click.prevent="unlockWallet" class="btn btn-primary">UNLOCK WALLET</div>
-      </b-modal>
+      <b-modal v-model="passwordShow" hide-footer :title=translations.send.unlock_wallet_first>
+      <b-form-input v-model="unlockPwd" type="password" :placeholder=translations.send.enter_wallet_password></b-form-input><br>
+      <div @click.prevent="unlockWallet" class="btn btn-primary">{{ translations.general.unlock_wallet }}</div>
+    </b-modal>
       <b-row>
         <b-col>
           <b-form-group id="title" label="Title" label-for="titleInput">
@@ -13,10 +13,10 @@
               type="text"
               v-model="titleToWrite"
               required
-              placeholder="Enter a title"
+              :placeholder=translations.upload.insert_title
             />
           </b-form-group>
-          <b-form-group id="encryptlabel" label="Encryption method" label-for="encrypt">
+          <b-form-group id="encryptlabel" :label=translations.upload.encrypt_label label-for="encrypt">
             <b-form-select id="encrypt" v-model="encryptUpload" :options="options"></b-form-select>
           </b-form-group>
           <b-form-group v-if="encryptUpload" id="password" label="Password" label-for="passwordInput">
@@ -24,14 +24,14 @@
               id="passwordInput"
               type="password"
               v-model="encryptionPassword"
-              placeholder="Choose a password to encrypt your file"
+              :placeholder=translations.upload.choose_password
               required />
           </b-form-group>
           <b-form-group id="file" label="File" label-for="fileInput">
             <b-form-file
               id="fileInput"
-              placeholder="Select file to upload..."
-              drop-placeholder="Drop file here..."
+              :placeholder=translations.upload.select_file
+              :drop-placeholder=translations.upload.drop
               @change="loadFileData"
               class="text-left"
             />
@@ -40,25 +40,29 @@
             <b-form-textarea
               id="messageTextarea"
               v-model="textToWrite"
-              placeholder="Write a text"
+              :placeholder=translations.upload.insert_text
               rows="4"
               max-rows="6"
             />
           </b-form-group>
-          <button v-if="!isUploading" class="btn btn-primary float-right mb-3" @click.prevent="openUnlockWallet">UPLOAD</button>
+          <button v-if="!isUploading" class="btn btn-primary float-right mb-3" @click.prevent="openUnlockWallet">{{ translations.upload.upload }}</button>
         </b-col>
       </b-row>
       <b-row v-if="isUploading">
-        <b-col class="text-center"><small><b-spinner label="Loading..." class="mr-2"></b-spinner></small>{{ workingmessage }}</b-col>
+        <b-col class="text-center"><small><b-spinner :label=translations.upload.loading class="mr-2"></b-spinner></small>{{ workingmessage }}</b-col>
       </b-row>
     </b-container>
 </template>
 
 <script>
+import locales from '../locales.js'
+
 export default {
   name: 'home',
   mounted : async function(){
     const app = this
+    let language = 'en'
+    this.translations = locales[language]
     app.connected = await this.scrypta.connectNode()
     app.checkUser()
   },

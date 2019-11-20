@@ -239,7 +239,7 @@ export default {
                 recipient = response.data.data[i].to[0]
               }
               var tx = {}
-              
+
               tx[app.translations.general.date] = date
               tx[app.translations.general.recipient] = recipient
               tx[app.translations.general.value] = response.data.data[i].value.toFixed(4) + ' LYRA'
@@ -254,7 +254,7 @@ export default {
             } else {
               app.transactionMessage = app.translations.general.no_transactions;
             }
-          });
+          })
       }
     },
     fetchGraph() {

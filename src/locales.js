@@ -1,5 +1,38 @@
 export default {
     en: {
+        upload: {
+            insert_title: "Enter a title",
+            encrypt_label: "Encryption method",
+            choose_password: "Choose a password to encrypt your file",
+            select_file: "Select file to upload...",
+            drop: 'Drop file here...',
+            insert_text: "Write a text",
+            upload: "UPLOAD",
+            loading: "Loading..."
+        },
+        send: {
+            loading_data: "Loading data, please wait...",
+            details_button: "Show details",
+            refresh: "Refresh",
+            upload: "Upload",
+            enter_wallet_password: "Enter wallet password",
+            unlock_wallet_first: "Unlock your wallet first",
+            insert_address: "Enter a valid LYRA address",
+            insert_amount: "Amount you mean to send",
+            sending: "Sending, please wait..",
+            successful: 'Send was successful, TXID is: '
+        },
+        archive: {
+            loading_data: "Loading data, please wait...",
+            details_button: "Show details",
+            refresh: "Refresh",
+            upload: "Upload",
+            unlock_wallet_first: "Unlock your wallet first"
+        },
+        explorer: {
+            search_placeholder: "Enter a public address to search",
+            details_button: "Show details",
+        },
         ui: {
             footer_description: 'Open Source Project developed by',
             data_explorer: 'Data Explorer',
@@ -7,6 +40,8 @@ export default {
             logout: 'Logout'
         },
         general: {
+            address: "Address",
+            unique_identifier: "Unique identifier",
             unlock_wallet: "UNLOCK WALLET",
             send: 'Send',
             receive: 'Receive',
@@ -17,7 +52,8 @@ export default {
             recipient: "Recipient",
             value: "Value",
             txid: 'TxID',
-            block: 'Block'
+            block: 'Block',
+            text: 'Text'
         },
         home: {
             balance: 'Your balance',
@@ -53,8 +89,92 @@ export default {
         },
     },
     it: {
+        upload: {
+            insert_title: "Enter a title",
+            encrypt_label: "Encryption method",
+            choose_password: "Choose a password to encrypt your file",
+            select_file: "Select file to upload...",
+            drop: 'Drop file here...',
+            insert_text: "Write a text",
+            upload: "UPLOAD",
+            loading: "Loading..."
+        },
+        send: {
+            loading_data: "Loading data, please wait...",
+            details_button: "Show details",
+            refresh: "Refresh",
+            upload: "Upload",
+            enter_wallet_password: "Enter wallet password",
+            unlock_wallet_first: "Unlock your wallet first",
+            insert_address: "Enter a valid LYRA address",
+            insert_amount: "Amount you mean to send",
+            sending: "Sending, please wait..",
+            successful: 'Send was successful, TXID is: '
+        },
+        archive: {
+            loading_data: "Loading data, please wait...",
+            details_button: "Show details",
+            refresh: "Refresh",
+            upload: "Upload",
+            unlock_wallet_first: "Unlock your wallet first"
+        },
+        explorer: {
+            search_placeholder: "Enter a public address to search",
+            details_button: "Show details",
+        },
+        ui: {
+            footer_description: 'Open Source Project developed by',
+            data_explorer: 'Data Explorer',
+            vault: 'Vault',
+            logout: 'Logout'
+        },
+        general: {
+            address: "Address",
+            unique_identifier: "Unique identifier",
+            unlock_wallet: "UNLOCK WALLET",
+            send: 'Send',
+            receive: 'Receive',
+            password_incorrect: "Password is incorrect!",
+            idanode_problem: "Seems there's a problem, please retry or change node!",
+            decrypt_wallet_first: "Decrypt your wallet first",
+            date: "Date",
+            recipient: "Recipient",
+            value: "Value",
+            txid: 'TxID',
+            block: 'Block',
+            text: 'Text'
+        },
         home: {
-            
+            balance: 'Il tuo bilancio',
+            open_block_explorer: 'Apri block explorer',
+            your_address: 'Il tuo indirizzo',
+            copy_address: 'Copia indirizzo negli appunti',
+            import_wallet: 'Importa un indirizzo',
+            drag_drop: 'Rilascia qui il file .sid o selezionalo',
+            drop: 'Rilascia file qui...',
+            send_lyra: 'Invia LYRA',
+            main_description: "Scrypta Manent is an application that you can use as a Wallet in Cloud, which will allow you to send and receive LYRA. You can also use it to upload files directly into the blockchain and encrypt them, thanks to IPFS technology and IdANodes. You have to make a backup. Please remind, you are ONLY responsible for this .sid file and password associated. No one will have to copy or to rescue it, so keep it safe.",
+            create_wallet: 'Crea un nuovo wallet',
+            enter_password: "Inserisci una password robusta e non dimenticarla!",
+            repeat_password: "Ripeti nuovamente la password.",
+            create_button: "CREA SUBITO",
+            import_existing_wallet: "Importa un wallet esistente",
+            select_sid: "Seleziona un file .sid generato da Manent App o ScryptaID. Puoi usare anche l'estensione ScryptaID per entrare velocemente",
+            import_button: "IMPORTA SUBITO",
+            choose_backup_method: "Seleziona un metodo:",
+            store_sid: "Salva il file .sid nel tuo dispositivo",
+            print_paper_wallet: "Stampa paper wallet",
+            sync_mobile: "Sincronizza l'app mobile",
+            unlock_wallet_first: "Sblocca il tuo wallet prima",
+            enter_wallet_password: "Inserisci la password del wallet",
+            sync_app_description: 'Apri l\'app Manent e clicca su "Restore paper wallet", quindi scannerizza il QR code.',
+            sync_app_title: 'Sincronizza l\'app mobile',
+            backup_or_sync: 'Backup o Sincronizzazione',
+            no_transactions: 'Nessuna transazione.',
+            paper_wallet_description: "Questo è il tuo paper wallet. Stampalo e non condividere queste informazioni con nessuno.",
+            address_copied: 'L\'indirizzo è stato copiato',
+            address_copy_error: 'Oops, copia non riuscita',
+            loading_transactions: "Carico transazioni..."
         },
     },
 };

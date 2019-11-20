@@ -1,9 +1,9 @@
 <template>
   <div class="home">
     <b-badge class="node-badge" v-if="connected" variant="success">{{ connected }}</b-badge>
-    <b-modal v-model="passwordShow" hide-footer title="Unlock your wallet first">
+    <b-modal v-model="passwordShow" hide-footer :title=tranlations.archive.unlock_wallet_first>
       <b-form-input v-model="unlockPwd" type="password" placeholder="Enter wallet password"></b-form-input><br>
-      <div @click.prevent="unlockWallet" class="btn btn-primary">UNLOCK WALLET</div>
+      <div @click.prevent="unlockWallet" class="btn btn-primary">{{ translations.general.unlock_wallet }}</div>
     </b-modal>
     <b-modal id="uploadModal" ref="upload-modal" title="Upload data" hide-footer>
       <Upload @hide-upload="hideModalUpload" />
@@ -11,14 +11,9 @@
     <b-container fluid>
       <b-row>
         <b-col v-if="readreturn">
-          <!--
-          <div style="float:left">
-              <b-button v-if="viewGrid" size="sm" variant="light" :pressed.sync="viewGrid" class="text-center"><font-awesome-icon icon="th" /></b-button>
-              <b-button v-if="!viewGrid" size="sm" variant="light" :pressed.sync="viewGrid" class="text-center"><font-awesome-icon icon="list" /></b-button>
-          </div> -->
           <div style="float:right">
-            <b-button size="sm" variant="primary" v-b-modal.uploadModal class="text-center mr-2"><font-awesome-icon icon="upload" class="mr-2" />Upload</b-button>
-            <b-button size="sm" variant="primary" @click.prevent="readData" class="text-center"><font-awesome-icon icon="sync" class="mr-2" />Refresh</b-button>
+            <b-button size="sm" variant="primary" v-b-modal.uploadModal class="text-center mr-2"><font-awesome-icon icon="upload" class="mr-2" />{{ translations.archive.upload }}</b-button>
+            <b-button size="sm" variant="primary" @click.prevent="readData" class="text-center"><font-awesome-icon icon="sync" class="mr-2" />{{ translations.archive.refresh }}</b-button>
           </div>
         </b-col>
       </b-row>
@@ -30,11 +25,9 @@
                 <small class="text-muted mr-3"><font-awesome-icon icon="clock" class="mr-1" />{{ item.time | moment("h:mm a") }}</small>
                 <small class="text-muted"><font-awesome-icon icon="calendar" class="mr-1" />{{ item.time | moment("dddd, MMMM Do YYYY") }}</small>
               </div>
-              <!-- <div v-if="item.collection !== ''" class="mb-1"><small class="text-muted">Collection:</small><br/>{{ item.collection }}</div>
-              <div v-if="item.refID !== ''" class="mb-1"><small class="text-muted">Reference:</small><br />{{ item.refID }}</div> -->
-              <div class="mb-1"><small class="text-muted">Unique identifier:</small><br/>{{ item.uuid }}</div>
-              <div class="mb-1"><small class="text-muted">Block</small><br />{{ item.block }}</div>
-              <div v-if="item.text" class="mb-1"><small class="text-muted">Text</small><br />{{ item.text }}</div>
+              <div class="mb-1"><small class="text-muted">{{ translations.general.unique_identifier }}:</small><br/>{{ item.uuid }}</div>
+              <div class="mb-1"><small class="text-muted">{{ translations.general.block }}</small><br />{{ item.block }}</div>
+              <div v-if="item.text" class="mb-1"><small class="text-muted">{{ translations.general.text }}</small><br />{{ item.text }}</div>
               <div v-if="item.mimetype" class="mb-1">
                 <div v-if="item.mimetype === 'audio'">
                   <audio controls style="width:100%">
@@ -49,7 +42,7 @@
               <div v-if="!item.mimetype || item.mimetype === 'text'" style="font-size:12px" class="mb-1">
                 {{ item.data }}
               </div>
-              <a :href="'https://proof.scryptachain.org/#/uuid/' + item.uuid" target="_blank"><b-button size="sm" style="margin-top:20px; width:100%" class="mr-1">Show details</b-button></a>
+              <a :href="'https://proof.scryptachain.org/#/uuid/' + item.uuid" target="_blank"><b-button size="sm" style="margin-top:20px; width:100%" class="mr-1">{{ translations.archive.details_button }}</b-button></a>
             </b-card-body>
           </b-card>
 
@@ -72,13 +65,14 @@
           </b-table>
         </b-col>
       </b-row>
-      <div class="row" v-if="isLoading"><div class="col-12 text-center">Loading data, please wait...</div></div>
+      <div class="row" v-if="isLoading"><div class="col-12 text-center">{{ tranlations.archive.loading_data }}</div></div>
     </b-container>
   </div>
 </template>
 
 <script>
 import Upload from './Upload'
+import locales from '../locales.js'
 
 export default {
   name: 'home',
@@ -86,6 +80,8 @@ export default {
     this.connected = await this.scrypta.connectNode()
     await this.checkUser()
     this.readData()
+    let language = 'en'
+    this.translations = locales[language]
   },
   components: {
     Upload

@@ -3,7 +3,7 @@
     <b-badge class="node-badge" v-if="connected" variant="success">{{ connected }}</b-badge>
     <b-modal v-model="passwordShow" hide-footer title="Unlock your wallet first">
       <b-form-input v-model="unlockPwd" type="password" placeholder="Enter wallet password"></b-form-input><br>
-      <div @click.prevent="unlockWallet" class="btn btn-primary">UNLOCK WALLET</div>
+      <div @click.prevent="unlockWallet" class="btn btn-primary">{{ translations.general.unlock_wallet }}</div>
     </b-modal>
     <b-modal id="uploadModal" title="Upload data" hide-footer>
       <Upload />
@@ -12,7 +12,7 @@
       <b-row>
         <b-col md="6" lg="8" v-if="readreturn">
           <b-input-group>
-            <b-form-input placeholder="Enter a public address to search"  v-on:change="searchByAddress" v-model="search_address"></b-form-input>
+            <b-form-input :placeholder=translations.explorer.search_placeholder  v-on:change="searchByAddress" v-model="search_address"></b-form-input>
             <b-input-group-append>
               <b-button size="sm" v-on:click="searchByAddress" text="Button" variant="primary"><font-awesome-icon icon="search" class="ml-3 mr-3" /></b-button>
             </b-input-group-append>
@@ -20,7 +20,6 @@
         </b-col>
         <b-col md="6" lg="4" v-if="readreturn">
           <div class="float-left">
-            <!-- <b-form-checkbox switch v-model="decryptRead" name="check-button">Decrypt data</b-form-checkbox> -->
               <b-button v-if="viewGrid" size="sm" variant="light" :pressed.sync="viewGrid" class="text-center mt-1"><font-awesome-icon icon="th" /></b-button>
               <b-button v-if="!viewGrid" size="sm" variant="light" :pressed.sync="viewGrid" class="text-center mt-1"><font-awesome-icon icon="list" /></b-button>
           </div>
@@ -36,10 +35,10 @@
               </div>
               <!-- <div v-if="item.collection !== ''" class="mb-1"><small class="text-muted">Collection:</small><br/>{{ item.collection }}</div>
               <div v-if="item.refID !== ''" class="mb-1"><small class="text-muted">Reference:</small><br />{{ item.refID }}</div> -->
-              <div class="mb-1"><small class="text-muted">Address:</small><br/>{{ item.address }}</div>
-              <div class="mb-1"><small class="text-muted">Unique identifier:</small><br/>{{ item.uuid }}</div>
-              <div class="mb-1"><small class="text-muted">Block</small><br />{{ item.block }}</div>
-              <div v-if="item.text" class="mb-1"><small class="text-muted">Text</small><br />{{ item.text }}</div>
+              <div class="mb-1"><small class="text-muted">{{ translations.general.address }}:</small><br/>{{ item.address }}</div>
+              <div class="mb-1"><small class="text-muted">{{ translations.general.unique_identifier }}:</small><br/>{{ item.uuid }}</div>
+              <div class="mb-1"><small class="text-muted">{{ translations.general.block }}</small><br />{{ item.block }}</div>
+              <div v-if="item.text" class="mb-1"><small class="text-muted">{{ translations.general.text }}</small><br />{{ item.text }}</div>
               <div v-if="item.mimetype" class="mb-1">
                 <div v-if="item.mimetype === 'audio'">
                   <audio controls style="width:100%">
@@ -54,7 +53,7 @@
               <div v-if="!item.mimetype || item.mimetype === 'text'" style="font-size:12px" class="mb-1">
                 {{ item.data }}
               </div>
-              <a :href="'https://proof.scryptachain.org/#/uuid/' + item.uuid" target="_blank"><b-button size="sm" style="margin-top:20px; width:100%" class="mr-1">Show details</b-button></a>
+              <a :href="'https://proof.scryptachain.org/#/uuid/' + item.uuid" target="_blank"><b-button size="sm" style="margin-top:20px; width:100%" class="mr-1">{{ translations.explorer.details_button }}</b-button></a>
             </b-card-body>
           </b-card>
 
@@ -80,11 +79,14 @@
 
 <script>
 import Upload from './Upload'
+import locales from '../locales.js';
 
 export default {
   name: 'home',
   mounted : async function(){
     this.connected = await this.scrypta.connectNode()
+    let language = 'en'
+    this.translations = locales[language]
     this.checkUser()
     this.readData()
   },
@@ -175,6 +177,7 @@ export default {
     return {
       scrypta: window.ScryptaCore,
       axios: window.axios,
+      translations: locales['en'],
       passwordShow: false,
       nodes: [],
       connected: '',
