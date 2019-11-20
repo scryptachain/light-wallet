@@ -80,8 +80,13 @@ export default {
     this.connected = await this.scrypta.connectNode()
     await this.checkUser()
     this.readData()
-    let language = 'en'
-    this.translations = locales[language]
+    const app = this
+    let language = navigator.language.split('-')
+    if(locales[language[0]] !== undefined){
+      app.translations = locales[language[0]]
+    }else{
+      app.translations = locales['en']
+    }
   },
   components: {
     Upload
@@ -181,6 +186,7 @@ export default {
     return {
       scrypta: window.ScryptaCore,
       axios: window.axios,
+      translations: locales['en'],
       passwordShow: false,
       nodes: [],
       connected: '',

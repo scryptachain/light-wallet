@@ -85,10 +85,15 @@ export default {
   name: 'home',
   mounted : async function(){
     this.connected = await this.scrypta.connectNode()
-    let language = 'en'
-    this.translations = locales[language]
     this.checkUser()
     this.readData()
+    const app = this
+    let language = navigator.language.split('-')
+    if(locales[language[0]] !== undefined){
+      app.translations = locales[language[0]]
+    }else{
+      app.translations = locales['en']
+    }
   },
   components: {
     Upload

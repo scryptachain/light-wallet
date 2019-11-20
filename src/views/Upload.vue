@@ -61,10 +61,14 @@ export default {
   name: 'home',
   mounted : async function(){
     const app = this
-    let language = 'en'
-    this.translations = locales[language]
     app.connected = await this.scrypta.connectNode()
     app.checkUser()
+    let language = navigator.language.split('-')
+    if(locales[language[0]] !== undefined){
+      app.translations = locales[language[0]]
+    }else{
+      app.translations = locales['en']
+    }
   },
   methods: {
       checkUser(){
@@ -220,6 +224,7 @@ export default {
       axios: window.axios,
       passwordShow: false,
       workingmessage: '',
+      translations: locales['en'],
       nodes: [],
       connected: '',
       encrypted_wallet: 'NO WALLET',

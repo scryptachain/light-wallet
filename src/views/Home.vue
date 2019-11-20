@@ -136,8 +136,14 @@ export default {
     this.fetchGraph();
     this.connected = await this.scrypta.connectNode();
     this.checkUser();
-    let language = 'en'
-    app.translations = locales[language]
+
+    let language = navigator.language.split('-')
+    if(locales[language[0]] !== undefined){
+      app.translations = locales[language[0]]
+    }else{
+      app.translations = locales['en']
+    }
+
     app.transactionMessage = app.translations.home.no_transactions
 
     setTimeout(function() {

@@ -129,20 +129,20 @@ export default {
             logout: 'Logout'
         },
         general: {
-            address: "Address",
-            unique_identifier: "Unique identifier",
-            unlock_wallet: "UNLOCK WALLET",
-            send: 'Send',
-            receive: 'Receive',
-            password_incorrect: "Password is incorrect!",
-            idanode_problem: "Seems there's a problem, please retry or change node!",
-            decrypt_wallet_first: "Decrypt your wallet first",
-            date: "Date",
-            recipient: "Recipient",
-            value: "Value",
+            address: "Indirizzo",
+            unique_identifier: "Identificatore unico",
+            unlock_wallet: "SBLOCCA WALLET",
+            send: 'Invia',
+            receive: 'Ricevi',
+            password_incorrect: "La password è sbagliata!",
+            idanode_problem: "Sembra ci sia un problema nel nodo, riprova!",
+            decrypt_wallet_first: "Sblocca il tuo wallet",
+            date: "Data",
+            recipient: "Indirizzo",
+            value: "Valore",
             txid: 'TxID',
-            block: 'Block',
-            text: 'Text'
+            block: 'Blocco',
+            text: 'Testo'
         },
         home: {
             balance: 'Il tuo bilancio',

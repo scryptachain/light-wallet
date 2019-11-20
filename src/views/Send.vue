@@ -51,8 +51,13 @@ export default {
   mounted : async function(){
     this.connected = await this.scrypta.connectNode()
     this.checkUser()
-    let language = 'en'
-    this.translations = locales[language]
+    const app = this
+    let language = navigator.language.split('-')
+    if(locales[language[0]] !== undefined){
+      app.translations = locales[language[0]]
+    }else{
+      app.translations = locales['en']
+    }
   },
   methods: {
       checkUser(){
@@ -115,6 +120,7 @@ export default {
     return {
       scrypta: window.ScryptaCore,
       axios: window.axios,
+      translations: locales['en'],
       passwordShow: false,
       nodes: [],
       connected: '',
