@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <b-badge class="node-badge" v-if="connected" variant="success">{{ connected }}</b-badge>
-    <b-modal v-model="passwordShow" hide-footer :title=tranlations.archive.unlock_wallet_first>
+    <b-modal v-model="passwordShow" hide-footer :title=translations.archive.unlock_wallet_first>
       <b-form-input v-model="unlockPwd" type="password" placeholder="Enter wallet password"></b-form-input><br>
       <div @click.prevent="unlockWallet" class="btn btn-primary">{{ translations.general.unlock_wallet }}</div>
     </b-modal>
@@ -65,7 +65,7 @@
           </b-table>
         </b-col>
       </b-row>
-      <div class="row" v-if="isLoading"><div class="col-12 text-center">{{ tranlations.archive.loading_data }}</div></div>
+      <div class="row" v-if="isLoading"><div class="col-12 text-center">{{ translations.archive.loading_data }}</div></div>
     </b-container>
   </div>
 </template>

@@ -90,43 +90,43 @@ export default {
     },
     it: {
         upload: {
-            insert_title: "Enter a title",
-            encrypt_label: "Encryption method",
-            choose_password: "Choose a password to encrypt your file",
-            select_file: "Select file to upload...",
-            drop: 'Drop file here...',
-            insert_text: "Write a text",
-            upload: "UPLOAD",
-            loading: "Loading..."
+            insert_title: "Inserisci un titolo",
+            encrypt_label: "Metodo di cifratura",
+            choose_password: "Scrivi una password per cifrare il file",
+            select_file: "Seleziona un file da caricare...",
+            drop: 'Rilascia il file qui...',
+            insert_text: "Scrivi un testo",
+            upload: "CARICA",
+            loading: "Caricamento..."
         },
         send: {
-            loading_data: "Loading data, please wait...",
-            details_button: "Show details",
-            refresh: "Refresh",
+            loading_data: "Caricamento, aspetta un attimo...",
+            details_button: "Dettagli",
+            refresh: "Ricarica",
             upload: "Upload",
-            enter_wallet_password: "Enter wallet password",
-            unlock_wallet_first: "Unlock your wallet first",
-            insert_address: "Enter a valid LYRA address",
-            insert_amount: "Amount you want to send",
-            sending: "Sending, please wait..",
-            successful: 'Send was successful, TXID is: '
+            enter_wallet_password: "Inserisci la password del wallet",
+            unlock_wallet_first: "Sblocca il wallet prima",
+            insert_address: "Inserisci un indirizzo LYRA valido",
+            insert_amount: "Ammontare che vuoi inviare",
+            sending: "Invio, aspetta un attimo..",
+            successful: 'Inviati correttamente, la password è: '
         },
         archive: {
-            loading_data: "Loading data, please wait...",
-            details_button: "Show details",
-            refresh: "Refresh",
+            loading_data: "Carico i dati aspetta...",
+            details_button: "Dettagli",
+            refresh: "Ricarica",
             upload: "Upload",
-            unlock_wallet_first: "Unlock your wallet first"
+            unlock_wallet_first: "Sblocca il wallet prima"
         },
         explorer: {
-            search_placeholder: "Enter a public address to search",
-            details_button: "Show details",
+            search_placeholder: "Inserisci un indirizzo per cercare",
+            details_button: "Dettagli",
         },
         ui: {
-            footer_description: 'Open Source Project developed by',
+            footer_description: 'Progetto open source sviluppato da',
             data_explorer: 'Data Explorer',
-            vault: 'Vault',
-            logout: 'Logout'
+            vault: 'Cassaforte',
+            logout: 'Esci'
         },
         general: {
             address: "Indirizzo",
