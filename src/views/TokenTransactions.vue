@@ -5,7 +5,7 @@
       <b-row>
         <b-col md="12">
           <b-card
-            :title="$route.params.sidechain"
+            :title="sidechainName"
             border-variant="light"
             class="mb-3 mt-3 shadow-sm"
           >
@@ -75,6 +75,15 @@ export default {
       var app = this;
       if (app.public_address !== undefined && app.public_address !== "") {
         app.axios
+          .get(app.connected + "/sidechain/list")
+          .then(function(response) {
+            for(let x in response.data.data){
+              let sidechain = response.data.data[x]
+              app.raw_sidechains[sidechain.address] = sidechain.genesis
+            }
+            app.sidechainName = app.raw_sidechains[app.$route.params.sidechain]['name'] + ' (' + app.raw_sidechains[app.$route.params.sidechain]['symbol'] + ')'
+          });
+        app.axios
           .post(app.connected + "/sidechain/transactions", {
             dapp_address: app.public_address,
             sidechain_address: app.$route.params.sidechain
@@ -127,6 +136,8 @@ export default {
         "block",
         "details"
       ],
+      sidechainName: '',
+      raw_sidechains: {},
       translations: locales["en"],
       connected: "",
       encrypted_wallet: "NO WALLET",
