@@ -35,6 +35,11 @@ export default new Router({
       path: '/token',
       name: 'token',
       component: () => import('./views/Token.vue')
+    },
+    {
+      path: '/sidechain/:sidechain',
+      name: 'sidechain',
+      component: () => import('./views/TokenTransactions.vue')
     }
   ]
 })

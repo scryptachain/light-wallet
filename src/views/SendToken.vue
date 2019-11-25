@@ -1,6 +1,5 @@
 <template>
   <b-container fluid class="text-left">
-    <h2>{{ translations.send.unlock_wallet_first }}</h2>
     <b-modal v-model="passwordShow" hide-footer :title=translations.send.unlock_wallet_first>
       <b-form-input v-model="unlockPwd" type="password" :placeholder=translations.send.enter_wallet_password></b-form-input><br>
       <div @click.prevent="unlockWallet" class="btn btn-primary">{{ translations.general.unlock_wallet }}</div>

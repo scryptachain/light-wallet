@@ -1,34 +1,24 @@
 <template>
   <div class="home">
     <b-badge class="node-badge" v-if="connected" variant="success">{{ connected }}</b-badge>
-    <b-modal id="sendModal" :title="translations.token.send_token" hide-footer>
-      <SendToken />
-    </b-modal>
     <b-container fluid v-if="user">
       <b-row>
         <b-col md="12">
           <b-card
-            :title="translations.token.your_tokens"
+            :title="$route.params.sidechain"
             border-variant="light"
             class="mb-3 mt-3 shadow-sm"
           >
-            <b-button v-if="!noTransactions" size="sm" variant="primary" style="float:right; margin-top:-45px" v-b-modal.sendModal class="text-center mr-2">
-              <font-awesome-icon icon="wallet" class="mr-2" />
-              {{ translations.general.send }} token
-            </b-button>
             <div v-if="!noTransactions">
               <b-table responsive hover :items="tokens" :fields="fields">
-                <template v-slot:cell(sidechain)="data">
-                  <strong>{{ raw_sidechains[data.item.sidechain].name }} ({{ raw_sidechains[data.item.sidechain].symbol }})</strong>
+                <template v-slot:cell(sxid)="data">
+                  {{ data.item.sxid.substr(0,6) }}...{{ data.item.sxid.substr(-6) }}
                 </template>
-                <template v-slot:cell(address)="data">
-                  {{ data.item.sidechain }}
-                </template>
-                <template v-slot:cell(balance)="data">
-                  {{ data.item.balance }} <i style="font-size:11px"> {{ data.item.symbol }}</i>
+                <template v-slot:cell(amount)="data">
+                  {{ data.item.amount }} {{ sidechainSymbol }}
                 </template>
                 <template v-slot:cell(details)="data">
-                  <a :href = "'/#/sidechain/' + data.item.sidechain"><div class="btn btn-primary" style="padding:2px; width:100%; text-align:center">></div></a>
+                  <a target="_blank" :href = "'https://sidechain.scryptachain.org/#/sxid/' + $route.params.sidechain + '/' + data.item.sxid"><div class="btn btn-primary" style="padding:2px; width:100%; text-align:center">></div></a>
                 </template>
               </b-table>
             </div>
@@ -42,7 +32,6 @@
 
 <script>
 import locales from "../locales.js";
-import SendToken from "./SendToken";
 
 export default {
   name: "home",
@@ -65,7 +54,6 @@ export default {
     }, 10000);
   },
   components: {
-    SendToken
   },
   methods: {
     checkUser() {
@@ -87,20 +75,14 @@ export default {
       var app = this;
       if (app.public_address !== undefined && app.public_address !== "") {
         app.axios
-          .get(app.connected + "/sidechain/list")
-          .then(function(response) {
-            for(let x in response.data.data){
-              let sidechain = response.data.data[x]
-              app.raw_sidechains[sidechain.address] = sidechain.genesis
-            }
-          });
-        app.axios
-          .post(app.connected + "/sidechain/scan/address", {
-            dapp_address: app.public_address
+          .post(app.connected + "/sidechain/transactions", {
+            dapp_address: app.public_address,
+            sidechain_address: app.$route.params.sidechain
           })
           .then(function(response) {
-            if (response.data.data.length > 0) {
-              app.tokens = response.data.data;
+            if (response.data.transactions.length > 0) {
+              app.tokens = response.data.transactions;
+              app.sidechainSymbol = response.data.symbol
               app.noTransactions = false;
             } else {
               app.transactionMessage = app.translations.tokens.no_tokens;
@@ -137,17 +119,19 @@ export default {
       scrypta: window.ScryptaCore,
       axios: window.axios,
       nodes: [],
-      raw_sidechains: [],
       fields: [
-        "sidechain",
-        "address",
-        "balance",
+        "sxid",
+        "from",
+        "to",
+        "amount",
+        "block",
         "details"
       ],
       translations: locales["en"],
       connected: "",
       encrypted_wallet: "NO WALLET",
       unlockPwd: "",
+      sidechainSymbol: '',
       file: "",
       createPwd: "",
       createPwdRepeat: "",
