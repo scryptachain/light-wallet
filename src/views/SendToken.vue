@@ -22,6 +22,7 @@
             id="amountToSend"
             type="number"
             v-model="amountToSend"
+            v-on:keyup="fixDecimals"
             required
             :placeholder=translations.send.insert_amount />
         </b-form-group>
@@ -59,9 +60,24 @@ export default {
           this.encrypted_wallet = this.scrypta.RAWsAPIKey;
         }
       },
+      fixDecimals(){
+        const app = this
+        let sidechain = app.raw_sidechains[app.tokenSelected]
+        if(sidechain !== undefined){
+          app.amountToSend = parseFloat(app.amountToSend).toFixed(sidechain.decimals)
+        }
+      },
       fetchTokens() {
         var app = this;
         if (app.public_address !== undefined && app.public_address !== "") {
+          app.axios
+          .get(app.connected + "/sidechain/list")
+          .then(function(response) {
+            for(let x in response.data.data){
+              let sidechain = response.data.data[x]
+              app.raw_sidechains[sidechain.address] = sidechain.genesis
+            }
+          });
           app.axios
             .post(app.connected + "/sidechain/scan/address", {
               dapp_address: app.public_address
@@ -155,6 +171,7 @@ export default {
       translations: locales['en'],
       passwordShow: false,
       tokenSelected: '',
+      raw_sidechains: [],
       nodes: [],
       tokens: [],
       tokenOptions: [],
