@@ -15,6 +15,7 @@ import { faFileContract } from '@fortawesome/free-solid-svg-icons'
 import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons'
 import { faSync } from '@fortawesome/free-solid-svg-icons'
 import { faCalendar } from '@fortawesome/free-solid-svg-icons'
+import { faLock } from '@fortawesome/free-solid-svg-icons'
 import { faClock } from '@fortawesome/free-solid-svg-icons'
 import { faList } from '@fortawesome/free-solid-svg-icons'
 import { faTh } from '@fortawesome/free-solid-svg-icons'
@@ -45,6 +46,7 @@ library.add(faTh)
 library.add(faShieldAlt)
 library.add(faSignOutAlt)
 library.add(faClipboard)
+library.add(faLock)
 library.add(faSearch)
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.config.productionTip = false

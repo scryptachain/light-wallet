@@ -110,7 +110,7 @@
       </b-row>
       <b-row>
         <b-col md="12">
-          <b-card title="Latest transactions" border-variant="light" class="mb-3 mt-3 shadow-sm">
+          <b-card :title=translations.home.latest_transactions border-variant="light" class="mb-3 mt-3 shadow-sm">
             <div v-if="!noTransactions">
               <b-table :current-page="currentPage" :per-page="10" responsive hover :items="items" sort-by="date DESC" />
               <b-pagination v-model="currentPage" :total-rows="countTransactions" :per-page="10"></b-pagination>

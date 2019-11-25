@@ -30,6 +30,11 @@ export default new Router({
       path: '/data-explorer',
       name: 'data-explorer',
       component: () => import('./views/DataExplorer.vue')
+    },
+    {
+      path: '/token',
+      name: 'token',
+      component: () => import('./views/Token.vue')
     }
   ]
 })

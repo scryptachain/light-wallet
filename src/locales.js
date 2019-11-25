@@ -1,5 +1,14 @@
 export default {
     en: {
+        token: {
+            your_tokens: 'Your tokens',
+            no_tokens: 'No tokens',
+            send_token: 'Send token',
+            select_token: 'Select a token',
+            no_balance: 'Not enough balance!',
+            send_success: 'Send was successful!!',
+            send_fail: 'Send failed, please retry.'
+        },
         upload: {
             insert_title: "Enter a title",
             encrypt_label: "Encryption method",
@@ -56,6 +65,7 @@ export default {
             text: 'Text'
         },
         home: {
+            latest_transactions: 'Latest transactions',
             balance: 'Your balance',
             open_block_explorer: 'Open block explorer',
             your_address: 'Your address',
@@ -89,6 +99,15 @@ export default {
         },
     },
     it: {
+        token: {
+            your_tokens: 'I tuoi token',
+            no_tokens: 'Nessun token',
+            send_token: 'Invia',
+            select_token: 'Seleziona un token',
+            no_balance: 'Non hai abbastanza token!',
+            send_success: 'Token inviati correttamente!',
+            send_fail: 'Invio fallito, ritenta.'
+        },
         upload: {
             insert_title: "Inserisci un titolo",
             encrypt_label: "Metodo di cifratura",
@@ -145,6 +164,7 @@ export default {
             text: 'Testo'
         },
         home: {
+            latest_transactions: 'Ultime transazioni',
             balance: 'Il tuo bilancio',
             open_block_explorer: 'Apri block explorer',
             your_address: 'Il tuo indirizzo',
