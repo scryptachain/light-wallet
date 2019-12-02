@@ -22,7 +22,7 @@
             id="amountToSend"
             type="number"
             v-model="amountToSend"
-            v-on:keyup="fixDecimals"
+            v-on:change="fixDecimals"
             required
             :placeholder=translations.send.insert_amount />
         </b-form-group>
