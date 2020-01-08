@@ -9,6 +9,7 @@
         <b-navbar-nav variant="primary">
           <b-nav-item href="/#/" class="mr-3"><font-awesome-icon icon="tachometer-alt" class="mr-2" />Dashboard</b-nav-item>
           <b-nav-item href="/#/data-explorer" class="mr-3"><font-awesome-icon icon="search" class="mr-2" />{{ translations.ui.data_explorer }}</b-nav-item>
+          <b-nav-item href="/#/sign" class="mr-3"><font-awesome-icon icon="pen-square" class="mr-2" />{{ translations.ui.sign }}</b-nav-item>
           <b-nav-item href="/#/archive" class="mr-3"><font-awesome-icon icon="lock" class="mr-2" />{{ translations.ui.vault }}</b-nav-item>
           <b-nav-item href="/#/token" class="mr-3"><font-awesome-icon icon="wallet" class="mr-2" />Token</b-nav-item>
         </b-navbar-nav>

@@ -46,7 +46,18 @@ export default {
             footer_description: 'Open Source Project developed by',
             data_explorer: 'Data Explorer',
             vault: 'Vault',
-            logout: 'Logout'
+            logout: 'Logout',
+            sign: 'Sign',
+            sign_message: 'Sign a message',
+            verify_message: 'Verify a message'
+        },
+        sign: {
+            pubkey: 'Public Key',
+            insert_pubkey: 'Insert Address\'s public key',
+            signature: 'Signature',
+            insert_signature: 'Insert signature',
+            text: 'Text',
+            verify: 'Verify'
         },
         general: {
             address: "Address",
@@ -145,7 +156,18 @@ export default {
             footer_description: 'Progetto open source sviluppato da',
             data_explorer: 'Data Explorer',
             vault: 'Cassaforte',
-            logout: 'Esci'
+            logout: 'Esci',
+            sign: 'Firma',
+            sign_message: 'Firma un messaggio',
+            verify_message: 'Verifica un messaggio'
+        },
+        sign: {
+            pubkey: 'Chiave pubblica',
+            insert_pubkey: 'Inserisci la chiave pubblica dell\'indirizzo',
+            signature: 'Firma',
+            insert_signature: 'Inserisci la firma',
+            text: 'Testo',
+            verify: 'Verifica'
         },
         general: {
             address: "Indirizzo",

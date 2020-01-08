@@ -13,7 +13,7 @@
               type="text"
               v-model="titleToWrite"
               required
-              :placeholder=translations.upload.insert_title
+              :placeholder="translations.upload.insert_title"
             />
           </b-form-group>
           <b-form-group id="encryptlabel" :label=translations.upload.encrypt_label label-for="encrypt">
@@ -24,7 +24,7 @@
               id="passwordInput"
               type="password"
               v-model="encryptionPassword"
-              :placeholder=translations.upload.choose_password
+              :placeholder="translations.upload.choose_password"
               required />
           </b-form-group>
           <b-form-group id="file" label="File" label-for="fileInput">

@@ -11,6 +11,7 @@ import { faCoffee } from '@fortawesome/free-solid-svg-icons'
 import { faWallet } from '@fortawesome/free-solid-svg-icons'
 import { faUpload } from '@fortawesome/free-solid-svg-icons'
 import { faArchive } from '@fortawesome/free-solid-svg-icons'
+import { faPenSquare } from '@fortawesome/free-solid-svg-icons'
 import { faFileContract } from '@fortawesome/free-solid-svg-icons'
 import { faTachometerAlt } from '@fortawesome/free-solid-svg-icons'
 import { faSync } from '@fortawesome/free-solid-svg-icons'
@@ -37,6 +38,7 @@ library.add(faWallet)
 library.add(faUpload)
 library.add(faArchive)
 library.add(faFileContract)
+library.add(faPenSquare)
 library.add(faTachometerAlt)
 library.add(faSync)
 library.add(faCalendar)

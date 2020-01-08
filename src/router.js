@@ -27,6 +27,11 @@ export default new Router({
       component: () => import('./views/Send.vue')
     },
     {
+      path: '/sign',
+      name: 'sign',
+      component: () => import('./views/Sign.vue')
+    },
+    {
       path: '/data-explorer',
       name: 'data-explorer',
       component: () => import('./views/DataExplorer.vue')
