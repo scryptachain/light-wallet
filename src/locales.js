@@ -28,6 +28,7 @@ export default {
             unlock_wallet_first: "Unlock your wallet first",
             insert_address: "Enter a valid LYRA address",
             insert_amount: "Amount you mean to send",
+            insert_memo: "Attach a text into the transaction",
             sending: "Sending, please wait..",
             successful: 'Send was successful, TXID is: '
         },
@@ -138,6 +139,7 @@ export default {
             unlock_wallet_first: "Sblocca il wallet prima",
             insert_address: "Inserisci un indirizzo LYRA valido",
             insert_amount: "Ammontare che vuoi inviare",
+            insert_memo: "Inserisci una nota per la transazione",
             sending: "Invio, aspetta un attimo..",
             successful: 'Inviati correttamente, la password è: '
         },

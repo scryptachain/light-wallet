@@ -1,6 +1,9 @@
 <template>
   <div class="home">
     <b-badge class="node-badge" v-if="connected" variant="success">{{ connected }}</b-badge>
+    <b-modal id="sendModal" :title="translations.token.send_token" hide-footer>
+      <SendToken :token="$route.params.sidechain" />
+    </b-modal>
     <b-container fluid v-if="user">
       <b-row>
         <b-col md="12">
@@ -9,6 +12,10 @@
             border-variant="light"
             class="mb-3 mt-3 shadow-sm"
           >
+            <b-button v-if="!noTransactions" size="sm" variant="primary" style="float:right; margin-top:-45px" v-b-modal.sendModal class="text-center mr-2">
+              <font-awesome-icon icon="wallet" class="mr-2" />
+              {{ translations.general.send }} token
+            </b-button>
             <div v-if="!noTransactions">
               <b-table responsive hover :items="tokens" :fields="fields">
                 <template v-slot:cell(sxid)="data">
@@ -32,6 +39,7 @@
 
 <script>
 import locales from "../locales.js";
+import SendToken from "./SendToken";
 
 export default {
   name: "home",
@@ -54,6 +62,7 @@ export default {
     }, 10000);
   },
   components: {
+    SendToken
   },
   methods: {
     checkUser() {
@@ -133,6 +142,7 @@ export default {
         "from",
         "to",
         "amount",
+        "memo",
         "block",
         "details"
       ],

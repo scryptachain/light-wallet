@@ -6,7 +6,7 @@
     </b-modal>
     <b-row>
       <b-col>
-        <b-form-group id="token" label="Token" label-for="tokenInput">
+        <b-form-group v-if="!token" id="token" label="Token" label-for="tokenInput">
           <b-form-select v-model="tokenSelected" :options="tokenOptions"></b-form-select>
         </b-form-group>
         <b-form-group id="address" label="Address" label-for="addressInput">
@@ -15,7 +15,7 @@
             type="text"
             v-model="addressToSend"
             required
-            :placeholder=translations.send.insert_address />
+            :placeholder="translations.send.insert_address" />
         </b-form-group>
         <b-form-group id="amount" label="Amount" label-for="amountInput">
           <b-form-input
@@ -24,7 +24,15 @@
             v-model="amountToSend"
             v-on:change="fixDecimals"
             required
-            :placeholder=translations.send.insert_amount />
+            :placeholder="translations.send.insert_amount" />
+        </b-form-group>
+        <b-form-group id="memo" label="Memo" label-for="memoInput">
+          <b-form-input
+            id="memo"
+            type="text"
+            v-model="memoToSend"
+            required
+            :placeholder="translations.send.insert_memo" />
         </b-form-group>
         <button v-if="!isSending" class="btn btn-primary float-right mt-3 mb-3" @click.prevent="openUnlockWallet">{{ translations.general.send }}</button>
       </b-col>
@@ -45,6 +53,9 @@ export default {
     await this.checkUser()
     this.fetchTokens()
     const app = this
+    if(app.token !== null){
+      app.tokenSelected = app.token
+    }
     let language = navigator.language.split('-')
     if(locales[language[0]] !== undefined){
       app.translations = locales[language[0]]
@@ -141,7 +152,8 @@ export default {
                 private_key: app.private_key,
                 pubkey: app.pubkey,
                 to: app.addressToSend,
-                amount: app.amountToSend
+                amount: app.amountToSend,
+                memo: app.memoToSend
               })
             if(sendRequest.data.uuid !== undefined){
               alert(app.translations.token.send_success)
@@ -150,6 +162,7 @@ export default {
               app.tokenSelected = ''
               app.addressToSend = ''
               app.amountToSend = ''
+              app.memoToSend = ''
             }else{
               alert(app.translations.token.send_fail)
             }
@@ -162,7 +175,8 @@ export default {
   },
   props: {
     user: null,
-    rawapikey: null
+    rawapikey: null,
+    token: null
   },
   data () {
     return {
@@ -186,6 +200,7 @@ export default {
       messageToSend: '',
       addressToSend: '',
       amountToSend: '',
+      memoToSend: '',
       private_key: '',
       pubkey: ''
     }

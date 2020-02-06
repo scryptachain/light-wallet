@@ -73,7 +73,6 @@
 
 <script>
 import locales from "../locales.js";
-import SendToken from "./SendToken";
 
 export default {
   name: "home",
@@ -92,9 +91,6 @@ export default {
     setTimeout(function() {
       app.backupAlert = false;
     }, 10000);
-  },
-  components: {
-    SendToken
   },
   methods: {
     checkUser() {
