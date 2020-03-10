@@ -110,6 +110,9 @@
       </b-row>
       <b-row>
         <b-col md="12">
+          <b-card v-if="unconfirmed.length > 0" :title=translations.home.unconfirmed_transactions border-variant="light" class="mb-3 mt-3 shadow-sm">
+              <b-table responsive hover :items="unconfirmed" sort-by="date DESC" />
+          </b-card>
           <b-card :title=translations.home.latest_transactions border-variant="light" class="mb-3 mt-3 shadow-sm">
             <div v-if="!noTransactions">
               <b-table :current-page="currentPage" :per-page="10" responsive hover :items="items" sort-by="date DESC" />
@@ -158,6 +161,7 @@ export default {
       this.backupAlert = true
     },
     checkUser() {
+      const app = this
       if (this.scrypta.keyExist()) {
         this.$emit(
           "onFoundUser",
@@ -174,7 +178,10 @@ export default {
         this.explorer_url =
           "https://explorer.scryptachain.org/address/" + this.scrypta.PubAddress
         this.checkBalance()
-        this.fetchTransactions()
+        app.fetchTransactions()
+        setInterval(function(){
+          app.fetchTransactions()
+        },30000)
       }
     },
     openImportWallet() {
@@ -235,16 +242,16 @@ export default {
         app.axios
           .get(app.connected + "/transactions/" + app.public_address)
           .then(function(response) {
-            for(var i = 0; i < response.data.data.length; i++ ){
-              var d = new Date(response.data.data[i].time * 1000)
-              var date = d.toLocaleDateString() + ' at ' + d.toLocaleTimeString() 
-              var recipient
+            for(let i = 0; i < response.data.data.length; i++ ){
+              let d = new Date(response.data.data[i].time * 1000)
+              let date = d.toLocaleDateString() + ' at ' + d.toLocaleTimeString() 
+              let recipient
               if(response.data.data[i].value > 0){
                 recipient = response.data.data[i].from[0]
               }else{
                 recipient = response.data.data[i].to[0]
               }
-              var tx = {}
+              let tx = {}
 
               tx[app.translations.general.date] = date
               tx[app.translations.general.recipient] = recipient
@@ -253,6 +260,26 @@ export default {
               tx[app.translations.general.block] = response.data.data[i].blockheight
 
               app.items.push(tx)
+            }
+
+            app.unconfirmed = []
+            for(let i = 0; i < response.data.unconfirmed.length; i++ ){
+              let d = new Date(response.data.data[i].time * 1000)
+              let date = d.toLocaleDateString() + ' at ' + d.toLocaleTimeString() 
+              let recipient
+              if(response.data.data[i].value > 0){
+                recipient = response.data.unconfirmed[i].from[0]
+              }else{
+                recipient = response.data.unconfirmed[i].to[0]
+              }
+              let tx = {}
+
+              tx[app.translations.general.date] = date
+              tx[app.translations.general.recipient] = recipient
+              tx[app.translations.general.value] = response.data.unconfirmed[i].value.toFixed(4) + ' LYRA'
+              tx[app.translations.general.txid] = response.data.unconfirmed[i].txid
+
+              app.unconfirmed.push(tx)
             }
             app.countTransactions = response.data.data.length;
             if (response.data.data.length > 0) {
@@ -366,6 +393,7 @@ export default {
       scrypta: window.ScryptaCore,
       axios: window.axios,
       nodes: [],
+      unconfirmed: [],
       translations: locales['en'],
       connected: "",
       encrypted_wallet: "NO WALLET",

@@ -78,6 +78,7 @@ export default {
         },
         home: {
             latest_transactions: 'Latest transactions',
+            unconfirmed_transactions: 'Unconfirmed transactions',
             balance: 'Your balance',
             open_block_explorer: 'Open block explorer',
             your_address: 'Your address',
@@ -189,6 +190,7 @@ export default {
         },
         home: {
             latest_transactions: 'Ultime transazioni',
+            unconfirmed_transactions: 'Transazioni non confermate',
             balance: 'Il tuo bilancio',
             open_block_explorer: 'Apri block explorer',
             your_address: 'Il tuo indirizzo',
