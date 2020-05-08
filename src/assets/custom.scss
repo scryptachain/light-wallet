@@ -55,3 +55,10 @@ html, body {
 #nav {
   padding: 30px;
 }
+
+@media screen and (max-width: 768px){
+  .gravatar{display: none;}
+  .sidechain-details h2{font-size:16px}
+  .sidechain-details h4{font-size:11px}
+  .sendtoken{float:none!important; width:100%; margin-top:10px!important; margin-bottom:10px;}
+}

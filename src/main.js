@@ -28,6 +28,9 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import HighchartsVue from 'highcharts-vue'
 import Msg from 'vue-message'
 import '@/assets/custom.scss'
+import Gravatar from 'vue-gravatar';
+ 
+Vue.component('v-gravatar', Gravatar);
 Vue.use(BootstrapVue)
 Vue.use(HighchartsVue)
 Vue.use(require('vue-moment'))

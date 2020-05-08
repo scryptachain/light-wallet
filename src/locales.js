@@ -142,7 +142,7 @@ export default {
             insert_amount: "Ammontare che vuoi inviare",
             insert_memo: "Inserisci una nota per la transazione",
             sending: "Invio, aspetta un attimo..",
-            successful: 'Inviati correttamente, la password è: '
+            successful: 'Inviati correttamente, la TXID è: '
         },
         archive: {
             loading_data: "Carico i dati aspetta...",

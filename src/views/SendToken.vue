@@ -45,7 +45,7 @@
 
 <script>
 import locales from '../locales.js'
-
+const ScryptaCoreNPM = require('@scrypta/core')
 export default {
   name: 'sendToken',
   mounted : async function(){
@@ -145,17 +145,9 @@ export default {
           let balanceRequest = await app.axios.post(app.connected + '/sidechain/balance',{ dapp_address: app.public_address, sidechain_address: app.tokenSelected })
           let balance = balanceRequest.data.balance
           if(balance >= app.amountToSend){
-            let sendRequest = await app.axios.post(app.connected + '/sidechain/send',
-              {
-                from: app.public_address, 
-                sidechain_address: app.tokenSelected,
-                private_key: app.private_key,
-                pubkey: app.pubkey,
-                to: app.addressToSend,
-                amount: app.amountToSend,
-                memo: app.memoToSend
-              })
-            if(sendRequest.data.uuid !== undefined){
+            app.scryptacore.usePlanum(app.tokenSelected)
+            let send = await app.scryptacore.sendPlanumAsset(app.public_address + ':' + app.encrypted_wallet, app.unlockPwd, app.addressToSend, app.amountToSend, '', app.memoToSend)
+            if(send !== false){
               alert(app.translations.token.send_success)
               app.private_key = ''
               app.pubkey = ''
@@ -181,6 +173,7 @@ export default {
   data () {
     return {
       scrypta: window.ScryptaCore,
+      scryptacore: new ScryptaCoreNPM(true),
       axios: window.axios,
       translations: locales['en'],
       passwordShow: false,

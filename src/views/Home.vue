@@ -59,9 +59,9 @@
     <b-container fluid v-if="user">
       <b-modal class="bg-danger text-center" title="Backup your .sid file" v-model="backupAlert">
         <h3 class="display-5">{{ translations.home.choose_backup_method }}</h3><br>
-        <a v-on:click="downloadWallet" class="btn btn-primary" href="#">{{ translations.home.store_sid }}</a><br><br>
-        <a @click.prevent="openUnlockWallet" class="btn btn-primary" href="#">{{ translations.home.print_paper_wallet }}</a><br><br>
-        <a @click.prevent="openUnlockWalletSync" class="btn btn-primary" href="#">{{ translations.home.sync_mobile }}</a>
+        <a v-on:click="downloadWallet" style="width:100%" class="btn btn-primary" href="#">{{ translations.home.store_sid }}</a><br><br>
+        <a @click.prevent="openUnlockWallet" style="width:100%" class="btn btn-primary" href="#">{{ translations.home.print_paper_wallet }}</a><br><br>
+        <a @click.prevent="openUnlockWalletSync" style="width:100%" class="btn btn-primary" href="#">{{ translations.home.sync_mobile }}</a>
       </b-modal>
       <b-modal v-model="passwordShow" hide-footer :title=translations.home.unlock_wallet_first>
         <b-form-input v-model="unlockPwd" type="password" :placeholder=translations.home.enter_wallet_password></b-form-input>
@@ -103,19 +103,32 @@
       </b-row>
       <b-row>
         <b-col>
-          <b-jumbotron bg-variant="white" header lead class="pt-5 pb-0 pr-5 m-1 shadow-sm">
+          <div class="mt-3" style="text-align:right; float:right; margin-right:30px;">
+            <b-button-group size="sm">
+              <b-button v-on:click="showGraph('BTC')">BTC</b-button>
+              <b-button v-on:click="showGraph('EUR')">EUR</b-button>
+              <b-button v-on:click="showGraph('USD')">USD</b-button>
+            </b-button-group>
+          </div>
+          <b-jumbotron v-if="showUSD" bg-variant="white" header lead class="pt-5 pb-0 pr-5 m-1 shadow-sm">
             <highcharts :options="chartOptions" ref="highcharts"></highcharts>
+          </b-jumbotron>
+          <b-jumbotron v-if="showEUR" bg-variant="white" header lead class="pt-5 pb-0 pr-5 m-1 shadow-sm">
+            <highcharts :options="EURchartOptions" ref="highcharts"></highcharts>
+          </b-jumbotron>
+          <b-jumbotron v-if="showBTC" bg-variant="white" header lead class="pt-5 pb-0 pr-5 m-1 shadow-sm">
+            <highcharts :options="BTCchartOptions" ref="highcharts"></highcharts>
           </b-jumbotron>
         </b-col>
       </b-row>
       <b-row>
         <b-col md="12">
           <b-card v-if="unconfirmed.length > 0" :title=translations.home.unconfirmed_transactions border-variant="light" class="mb-3 mt-3 shadow-sm">
-              <b-table responsive hover :items="unconfirmed" sort-by="date DESC" />
+              <b-table stacked="md" responsive hover :items="unconfirmed" sort-by="date DESC" />
           </b-card>
           <b-card :title=translations.home.latest_transactions border-variant="light" class="mb-3 mt-3 shadow-sm">
             <div v-if="!noTransactions">
-              <b-table :current-page="currentPage" :per-page="10" responsive hover :items="items" sort-by="date DESC" />
+              <b-table stacked="md" :current-page="currentPage" :per-page="10" responsive hover :items="items" sort-by="date DESC" />
               <b-pagination v-model="currentPage" :total-rows="countTransactions" :per-page="10"></b-pagination>
             </div>
             <div v-if="noTransactions">{{ transactionMessage }}</div>
@@ -159,6 +172,21 @@ export default {
   methods: {
     showBackup(){
       this.backupAlert = true
+    },
+    showGraph(what){
+      const app = this
+      app.showBTC = false
+      app.showEUR = false
+      app.showUSD = false
+      if(what === 'BTC'){
+        app.showBTC = true
+      }
+      if(what === 'USD'){
+        app.showUSD = true
+      }
+      if(what === 'EUR'){
+        app.showEUR = true
+      }
     },
     checkUser() {
       const app = this
@@ -297,6 +325,16 @@ export default {
         .then(function(response) {
           app.chartOptions.series[0].data = response.data.prices
         });
+      app.axios
+        .get("https://api.coingecko.com/api/v3/coins/scrypta/market_chart?vs_currency=btc&days=30")
+        .then(function(response) {
+          app.BTCchartOptions.series[0].data = response.data.prices
+        });
+      app.axios
+        .get("https://api.coingecko.com/api/v3/coins/scrypta/market_chart?vs_currency=eur&days=30")
+        .then(function(response) {
+          app.EURchartOptions.series[0].data = response.data.prices
+        });
     },
     openUnlockWalletSync() {
       this.passwordShowSync = true;
@@ -407,6 +445,9 @@ export default {
       address_balance: "BALANCE UNKNOWN",
       explorer_url: "",
       passwordShow: false,
+      showBTC: true,
+      showEUR: false,
+      showUSD: false,
       passwordShowSync: false,
       importShow: false,
       decrypted_wallet: "",
@@ -426,7 +467,71 @@ export default {
               enabled: false
             },
             name: "Price USD",
-            color: '#D43F51'
+            color: '#59BA29'
+          }
+        ],
+        yAxis: {
+          title: {
+            text: "price"
+          }
+        },
+        xAxis: {
+          type: "datetime",
+          tickInterval: 24 * 3600 * 1000
+        },
+        credits: {
+          enabled: false
+        },
+        chart: {
+          backgroundColor: "transparent"
+        },
+        title: {
+          text: undefined
+        }
+      },
+      BTCchartOptions: {
+        series: [
+          {
+            data: [],
+            type: "spline",
+            zIndex: 0,
+            marker: {
+              enabled: false
+            },
+            name: "Price BTC",
+            color: '#f2a900'
+          }
+        ],
+        yAxis: {
+          title: {
+            text: "price"
+          }
+        },
+        xAxis: {
+          type: "datetime",
+          tickInterval: 24 * 3600 * 1000
+        },
+        credits: {
+          enabled: false
+        },
+        chart: {
+          backgroundColor: "transparent"
+        },
+        title: {
+          text: undefined
+        }
+      },
+      EURchartOptions: {
+        series: [
+          {
+            data: [],
+            type: "spline",
+            zIndex: 0,
+            marker: {
+              enabled: false
+            },
+            name: "Price EUR",
+            color: '#003399'
           }
         ],
         yAxis: {

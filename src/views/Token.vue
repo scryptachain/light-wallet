@@ -17,12 +17,10 @@
               {{ translations.general.send }} token
             </b-button>
             <div v-if="!noTransactions">
-              <b-table responsive hover :items="tokens" :fields="fields">
+              <b-table responsive hover stacked="md" :items="tokens" :fields="fields">
                 <template v-slot:cell(sidechain)="data">
+                  <v-gravatar :email="data.item.sidechain" style="width:27px; height:27px; float:left; margin-right:10px;" />
                   <strong>{{ raw_sidechains[data.item.sidechain].name }} ({{ raw_sidechains[data.item.sidechain].symbol }})</strong>
-                </template>
-                <template v-slot:cell(address)="data">
-                  {{ data.item.sidechain }}
                 </template>
                 <template v-slot:cell(balance)="data">
                   {{ data.item.balance }} <i style="font-size:11px"> {{ data.item.symbol }}</i>
@@ -140,7 +138,6 @@ export default {
       raw_sidechains: [],
       fields: [
         "sidechain",
-        "address",
         "balance",
         "details"
       ],

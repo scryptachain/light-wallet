@@ -8,16 +8,19 @@
       <b-row>
         <b-col md="12">
           <b-card
-            :title="sidechainName"
             border-variant="light"
-            class="mb-3 mt-3 shadow-sm"
+            class="mb-3 mt-3 shadow-sm sidechain-details"
           >
-            <b-button v-if="!noTransactions" size="sm" variant="primary" style="float:right; margin-top:-45px" v-b-modal.sendModal class="text-center mr-2">
+
+            <v-gravatar class="gravatar" :email="$route.params.sidechain" style="width:90px; height:90px; float:left; margin-top:-5px; margin-right:20px;" />
+            <h2>{{ sidechainName }}</h2>
+            <h4>{{ $route.params.sidechain }}</h4>
+            <b-button v-if="!noTransactions" size="sm" variant="primary" style="float:right; margin-top:-65px" v-b-modal.sendModal class="text-center mr-2 sendtoken">
               <font-awesome-icon icon="wallet" class="mr-2" />
               {{ translations.general.send }} token
             </b-button>
             <div v-if="!noTransactions">
-              <b-table responsive hover :items="tokens" :fields="fields">
+              <b-table responsive hover stacked="lg" :items="tokens" :fields="fields">
                 <template v-slot:cell(sxid)="data">
                   {{ data.item.sxid.substr(0,6) }}...{{ data.item.sxid.substr(-6) }}
                 </template>
@@ -25,7 +28,7 @@
                   {{ data.item.amount }} {{ sidechainSymbol }}
                 </template>
                 <template v-slot:cell(details)="data">
-                  <a target="_blank" :href = "'https://sidechain.scryptachain.org/#/sxid/' + $route.params.sidechain + '/' + data.item.sxid"><div class="btn btn-primary" style="padding:2px; width:100%; text-align:center">></div></a>
+                  <a target="_blank" :href = "'https://chains.planum.dev/#/transaction/' + $route.params.sidechain + '/' + data.item.sxid"><div class="btn btn-primary" style="padding:2px; width:100%; text-align:center">></div></a>
                 </template>
               </b-table>
             </div>
