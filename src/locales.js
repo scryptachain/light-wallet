@@ -54,6 +54,7 @@ export default {
             details_button: "Show details",
         },
         ui: {
+            welcome_back: 'Welcome back',
             footer_description: 'Open Source Project developed by',
             data_explorer: 'Data Explorer',
             vault: 'Vault',
@@ -176,6 +177,7 @@ export default {
             details_button: "Dettagli",
         },
         ui: {
+            welcome_back: 'Bentornato',
             footer_description: 'Progetto open source sviluppato da',
             data_explorer: 'Data Explorer',
             vault: 'Cassaforte',
