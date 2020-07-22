@@ -1,0 +1,192 @@
+@import "~bulma/sass/utilities/_all";
+$primary: #D8213B;
+$primary-invert: findColorInvert($primary);
+$twitter: #4099FF;
+$twitter-invert: findColorInvert($twitter);
+
+.navbar-item{
+    font-size:13px!important;
+}
+
+#app {
+    font-family: "Sen";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+  }
+
+  #nav {
+    padding: 30px;
+  }
+
+  #nav a {
+    font-weight: bold;
+    color: #2c3e50;
+  }
+
+  #nav a.router-link-exact-active {
+    color: #42b983;
+  }
+
+@media screen and (min-width: 1024px){
+    .footer{
+        position:fixed;
+        bottom:0; 
+        left:90px;
+        width:100%;
+        border-top:1px solid #ccc;
+        padding:10px!important;
+        font-size:9px;
+        text-align:left;
+    }
+    .navbar{
+        position:fixed!important;
+        display: block!important;
+        top: 0!important;
+        left:0!important;
+        width:90px!important;
+    }
+    .navbar-menu {
+        position: fixed;
+        top: 50px;
+        left: 0;
+        background:#fff;
+        z-index:20;
+        border-right: 1px solid #ccc;
+        width: 90px;
+        height: 100vh;
+        overflow: auto;
+    }
+    .navbar-brand{
+        width: 90px;
+        background: #fff;
+        border-right: 1px solid #ccc;
+    }
+    .navbar-item, .navbar-link{
+        display:block!important; 
+        align-items: none;
+        width:90px!important;
+        height:60px!important;
+        float:none!important;
+        text-align:center!important;
+        font-size:11px!important;
+        padding:20px 0!important;
+    }
+    .content{
+        padding-left:110px;
+        padding-right:20px;
+        padding-top:20px;
+        text-align:left;
+    }
+    .navbar-item:hover, .navbar-link:hover, .navbar-item:active, .navbar-link:active, .navbar-item:focus, .navbar-link:focus{
+        background:transparent!important
+    }
+    .menu-icon{
+        display:inline!important;
+    }
+    .navbar-start{
+        width:90px;
+        display:block!important;
+    }
+    .navbar-item span{
+        display:block;
+        width:100%;
+    }
+}
+
+@media screen and (max-width: 1023px){
+    .navbar-start{
+        text-align:left;
+        padding-left:30px;
+        padding-top:8vh;
+    } 
+    .navbar-item span{
+        margin-left: 20px;
+        font-size: 22px;
+    }
+    .navbar-menu{
+        height: calc(100vh - 55px);
+    }
+}
+.footer{
+    background:transparent!important;
+    padding: 10px!important;
+    border-top:1px solid #ccc;
+}
+.text-left{
+    text-align: left;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.main{
+    margin-top:30px;    
+}
+
+$colors: (
+    "white": ($white, $black),
+    "black": ($black, $white),
+    "light": ($light, $light-invert),
+    "dark": ($dark, $dark-invert),
+    "primary": ($primary, $primary-invert),
+    "info": ($info, $info-invert),
+    "success": ($success, $success-invert),
+    "warning": ($warning, $warning-invert),
+    "danger": ($danger, $danger-invert),
+    "twitter": ($twitter, $twitter-invert)
+);
+
+$link: $primary;
+$link-invert: $primary-invert;
+$link-focus-border: $primary;
+
+@import "~bulma";
+@import "~buefy/src/scss/buefy";
+
+body, html, .button{
+    font-family: "Sen"!important;
+}
+
+.social-shares span:hover{
+    cursor:pointer!important;
+    opacity:0.4!important;
+}
+
+.main{
+    min-height: 70vh;
+}
+
+.select, select{
+    width:100%;
+}
+
+h1{
+    font-size:28px;
+    font-weight: bold;
+}
+
+.upload-draggable, .upload{
+    width:100%!important;
+}
+
+.text-center{
+    text-align:center;
+}
+
+.list-trade{
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+    padding:10px;
+    margin-bottom:15px;
+}
+
+.list-trade strong{
+    font-size:20px;
+}
+
+.text-center input{
+    text-align: center!important;
+}

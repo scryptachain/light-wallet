@@ -1,7 +1,7 @@
 <template>
   <div class="page" v-if="!isLoading">
     <b-loading :is-full-page="true" :active.sync="isLoading"></b-loading>
-    <h1>Send</h1>
+    <h1>Vault</h1>
   </div>
 </template>
 
@@ -9,7 +9,7 @@
   let ScryptaCore = require("@scrypta/core");
   import User from '@/user'
   export default {
-    name: 'Send',
+    name: 'Vault',
     data() {
       return {
         scrypta: new ScryptaCore(true),

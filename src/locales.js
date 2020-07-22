@@ -1,5 +1,15 @@
 export default {
     en: {
+        menu: {
+            send: 'Send',
+            receive: 'Receive',
+            vault: 'Vault',
+            identities: 'Identities',
+            sign: 'Sign',
+            portfolio: 'Portfolio',
+            contacts: 'Contacts',
+            settings: 'Settings'
+        },
         token: {
             your_tokens: 'Your tokens',
             no_tokens: 'No tokens',
@@ -112,6 +122,16 @@ export default {
         },
     },
     it: {
+        menu: {
+            send: 'Invia',
+            receive: 'Ricevi',
+            vault: 'Archivio',
+            identities: 'Identità',
+            sign: 'Firma',
+            portfolio: 'Portafoglio',
+            contacts: 'Contatti',
+            settings: 'Impostazioni'
+        },
         token: {
             your_tokens: 'I tuoi token',
             no_tokens: 'Nessun token',
