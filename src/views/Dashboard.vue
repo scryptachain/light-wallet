@@ -28,7 +28,7 @@
           </b-table-column>
       </template>
     </b-table>
-    <div v-if="confirmed.length > 0">{{ configs.locales.home.latest_transactions174.138.100.175 }}</div>
+    <div v-if="confirmed.length > 0">{{ configs.locales.home.latest_transactions }}</div>
     <b-table :data="confirmed" :pagination-simple="true" :paginated="true" :per-page="5" style="font-size:14px">
       <template slot-scope="props">
           <b-table-column field="type" label="Type">
