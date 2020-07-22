@@ -28,7 +28,7 @@
           </b-table-column>
       </template>
     </b-table>
-    <div v-if="confirmed.length > 0">{{ configs.locales.home.latest_transactions }}</div>
+    <div v-if="confirmed.length > 0">{{ configs.locales.home.latest_transactions174.138.100.175 }}</div>
     <b-table :data="confirmed" :pagination-simple="true" :paginated="true" :per-page="5" style="font-size:14px">
       <template slot-scope="props">
           <b-table-column field="type" label="Type">
@@ -106,15 +106,23 @@
       app.wallet = await User.auth()
       if(app.wallet !== false){
         app.configs = await User.configs()
-        await app.fetchTransactions()
-        app.isLoading = false
-        setInterval(function(){
-          app.fetchTransactions()
-        }, 15000)
+        if(app.configs.chain === 'LYRA'){
+          await app.fetchLYRATransactions()
+          app.isLoading = false
+          setInterval(function(){
+            app.fetchLYRATransactions()
+          }, 15000)
+        }else{
+          await app.fetchPlanumTransactions()
+          app.isLoading = false
+          setInterval(function(){
+            app.fetchPlanumTransactions()
+          }, 15000)
+        }
       }
     },
     methods: {
-      fetchTransactions(){
+      fetchLYRATransactions(){
         const app = this
         return new Promise(async response => {
           let balance = await app.scrypta.get('/balance/' + app.wallet.address)
@@ -195,6 +203,12 @@
               app.confirmed.push(transaction)
             }
           }
+          response(true)
+        })
+      },
+      fetchPlanumTransactions(){
+        const app = this
+        return new Promise(async response => {
           response(true)
         })
       },

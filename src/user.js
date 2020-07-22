@@ -31,7 +31,16 @@ export default {
                 language = language.value
             }
 
+            let chain = await db.get('settings', 'set', 'chain')
+            if(!language){
+                chain = 'LYRA'
+                await db.put('settings', { set: 'chain', value: 'LYRA' })
+            }else{
+                chain = chain.value
+            }
+
             response({
+                chain: chain,
                 language: language,
                 locales: Locales[language]
             })
