@@ -32,7 +32,7 @@ export default {
             }
 
             let chain = await db.get('settings', 'set', 'chain')
-            if(!language){
+            if(!chain){
                 chain = 'LYRA'
                 await db.put('settings', { set: 'chain', value: 'LYRA' })
             }else{

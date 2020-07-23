@@ -1,7 +1,7 @@
 <template>
   <div class="page" v-if="!isLoading">
     <b-loading :is-full-page="true" :active.sync="isLoading"></b-loading>
-    <h1 style="position:absolute; top: 0; right:0; font-size:22px; text-align:right"><span style="font-size:30px">LYRA</span><br>{{ balance }}</h1>
+    <h1 style="position:absolute; top: 0; right:0; font-size:22px; text-align:right"><span style="font-size:30px">{{ ticker }}</span><br>{{ balance }}</h1>
     <h1 class="is-title is-2" style="margin-top:8px">
       <v-gravatar style="float:left; border-radius:5px; margin-right: 25px; margin-top:-8px;" :email="wallet.address" />
       {{ configs.locales.ui.welcome_back }}
@@ -24,7 +24,7 @@
             {{ props.row.to }}
           </b-table-column>
           <b-table-column field="value" label="Value">
-              {{ props.row.value.toFixed(8) }} LYRA
+              {{ props.row.value.toFixed(8) }} {{ ticker }}
           </b-table-column>
       </template>
     </b-table>
@@ -50,7 +50,7 @@
               {{ props.row.blockheight }}
           </b-table-column>
           <b-table-column field="value" label="Value">
-              {{ props.row.value.toFixed(8) }} LYRA
+              {{ props.row.value.toFixed(8) }} {{ ticker }}
           </b-table-column>
       </template>
       <template slot="empty">
@@ -80,6 +80,7 @@
         scrypta: new ScryptaCore(true),
         configs: {},
         wallet: "",
+        ticker: "",
         options: {
           xaxis: {
             categories: [],
@@ -107,6 +108,7 @@
       if(app.wallet !== false){
         app.configs = await User.configs()
         if(app.configs.chain === 'LYRA'){
+          app.ticker = 'LYRA'
           await app.fetchLYRATransactions()
           app.isLoading = false
           setInterval(function(){
@@ -176,7 +178,7 @@
           if(app.transactions.unconfirmed.length > 0){
             for(let x in app.transactions.unconfirmed){
               let transaction = app.transactions.unconfirmed[x]
-              if(transaction.to[1] !== undefined || transaction.from[0] !== transaction.to[1]){
+              if((transaction.to[1] !== undefined && transaction.from[0] !== transaction.to[1]) || (transaction.to[1] === undefined && transaction.from[0] !== transaction.to[0])){
                 transaction.date = app.getDate(transaction.time*1000)
                 let expdate = transaction.date.split('-')
                 transaction.date = expdate[2] + '/' + expdate[1] + '/' + expdate[0] + ' at ' + app.getTime(transaction.time*1000)
@@ -192,7 +194,7 @@
           app.transactions = app.transactions.data.reverse()
           for(let x in app.transactions){
             let transaction = app.transactions[x]
-            if(transaction.to[1] !== undefined || transaction.from[0] !== transaction.to[1]){
+            if((transaction.to[1] !== undefined && transaction.from[0] !== transaction.to[1]) || (transaction.to[1] === undefined && transaction.from[0] !== transaction.to[0])){
               transaction.date = app.getDate(transaction.time*1000)
               let expdate = transaction.date.split('-')
               transaction.date = expdate[2] + '/' + expdate[1] + '/' + expdate[0] + ' at ' + app.getTime(transaction.time*1000)
@@ -209,6 +211,9 @@
       fetchPlanumTransactions(){
         const app = this
         return new Promise(async response => {
+          let balance = await app.scrypta.post('/sidechain/balance', {sidechain_address: app.configs.chain, dapp_address: app.wallet.address })
+          app.balance = balance.balance
+          app.ticker = balance.symbol
           response(true)
         })
       },
