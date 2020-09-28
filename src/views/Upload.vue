@@ -27,7 +27,7 @@
               :placeholder="translations.upload.choose_password"
               required />
           </b-form-group>
-          <b-form-group id="file" label="File" label-for="fileInput">
+          <b-form-group style="display:none" id="file" label="File" label-for="fileInput">
             <b-form-file
               id="fileInput"
               :placeholder=translations.upload.select_file
